@@ -45,6 +45,7 @@
         <a href="#menuBuilder" class="hover:text-white">Menu Builder</a>
         <a href="#perfectDisplay" class="hover:text-white">Perfect Display</a>
         <a href="#tools" class="hover:text-white">Tools</a>
+        <a href="#cocktailMenu" class="hover:text-white">Menu Costing</a>
         <a href="#promotions" class="hover:text-white">Promotions</a>
         <a href="#rep" class="hover:text-white">Rep Connection</a>
         <a href="#support" class="hover:text-white">Support</a>
@@ -403,7 +404,110 @@
     </section>
 </section>   <!-- end Tools -->
 
-<!-- PASTE NEW COCKTAIL BUILDER RIGHT HERE -->
+<!-- Cocktail Menu Costing & Pricing -->
+<section id="cocktailMenu" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
+  <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+    <div>
+      <h2 class="text-xl font-black">Cocktail Menu Costing & Pricing</h2>
+      <p class="mt-1 text-sm text-slate-300">
+        Enter each ingredient (bottle cost + size + recipe amount). We calculate cost, suggested price, and compare premium vs value swaps (demo).
+      </p>
+    </div>
+
+    <div class="flex flex-wrap gap-2">
+      <div class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm">
+        Target Pour Cost %
+        <input id="cmTargetPct" type="number" value="20"
+          class="ml-2 w-16 rounded-lg border border-white/10 bg-slate-900/60 px-2 py-1 text-sm" />
+      </div>
+
+      <div class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm">
+        Variance %
+        <input id="cmVariancePct" type="number" value="20"
+          class="ml-2 w-16 rounded-lg border border-white/10 bg-slate-900/60 px-2 py-1 text-sm" />
+      </div>
+
+      <div class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm">
+        Menu Price ($)
+        <input id="cmMenuPrice" type="number" value="14"
+          class="ml-2 w-20 rounded-lg border border-white/10 bg-slate-900/60 px-2 py-1 text-sm" />
+      </div>
+
+      <button id="cmAddIngredientBtn"
+        class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
+        + Add ingredient
+      </button>
+
+      <button id="cmCalcBtn"
+        class="rounded-xl bg-gradient-to-r from-violet-500 to-emerald-400 px-3 py-2 text-sm font-bold text-slate-950 hover:brightness-110 transition">
+        Calculate
+      </button>
+    </div>
+  </div>
+
+  <div class="mt-4 grid gap-4 md:grid-cols-3">
+    <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4 md:col-span-2">
+      <div class="flex items-center justify-between">
+        <div class="font-extrabold">Build a cocktail (ingredients)</div>
+        <div class="text-xs text-slate-400">All numbers demo-safe</div>
+      </div>
+
+      <div class="mt-3 overflow-auto rounded-xl border border-white/10">
+        <table class="w-full text-sm">
+          <thead class="text-slate-300">
+            <tr class="border-b border-white/10">
+              <th class="p-3 text-left">Ingredient</th>
+              <th class="p-3 text-right">Bottle Cost</th>
+              <th class="p-3 text-right">Bottle Oz</th>
+              <th class="p-3 text-right">Recipe Oz</th>
+              <th class="p-3 text-right">Cost/Oz</th>
+              <th class="p-3 text-right">Cost in Drink</th>
+              <th class="p-3"></th>
+            </tr>
+          </thead>
+          <tbody id="cmTbody"></tbody>
+        </table>
+      </div>
+
+      <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+        <button id="cmSaveCocktailBtn"
+          class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
+          Save cocktail to menu
+        </button>
+
+        <div class="text-sm text-slate-300">
+          Total ingredient cost:
+          <span id="cmTotalCost" class="font-black text-white ml-1">—</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+      <div class="font-extrabold">Pricing results</div>
+      <div id="cmResults" class="mt-3 text-sm text-slate-200">
+        Add ingredients and click Calculate.
+      </div>
+      <div class="mt-3 text-xs text-slate-400">
+        Based on pour cost % = cost ÷ sale price (and variance). 
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 grid gap-4 md:grid-cols-2">
+    <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+      <div class="font-extrabold">Saved menu (multiple cocktails)</div>
+      <div id="cmMenuList" class="mt-3 grid gap-2"></div>
+    </div>
+
+    <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+      <div class="font-extrabold">Swap simulator (premium vs value)</div>
+      <div class="mt-2 text-sm text-slate-300">
+        Example: Swap $60 tequila to $20 tequila and see the new pour cost & gross.
+      </div>
+      <div id="cmSwapOut" class="mt-3 grid gap-2"></div>
+    </div>
+  </div>
+</section>
 
 <!-- Promotions -->
 <section id="promotions" ...
@@ -842,7 +946,236 @@
       a.click();
       URL.revokeObjectURL(url);
     });
+// ------------------------------
+// Cocktail Menu Costing (Multi-Ingredient) - Demo
+// ------------------------------
+const cm = {
+  rows: [],
+  menu: [],
+  tbody: () => document.getElementById("cmTbody"),
+  targetPct: () => Number(document.getElementById("cmTargetPct").value || 20),
+  variancePct: () => Number(document.getElementById("cmVariancePct").value || 20),
+  menuPrice: () => Number(document.getElementById("cmMenuPrice").value || 14)
+};
 
+function cmAddIngredient(prefill = {}) {
+  const row = {
+    id: crypto?.randomUUID?.() || String(Math.random()),
+    name: prefill.name || "Tequila",
+    bottleCost: prefill.bottleCost ?? 60,
+    bottleOz: prefill.bottleOz ?? 25.4,     // 750ml default
+    recipeOz: prefill.recipeOz ?? 1.5
+  };
+  cm.rows.push(row);
+  cmRender();
+}
+
+function cmRemoveIngredient(id) {
+  cm.rows = cm.rows.filter(r => r.id !== id);
+  cmRender();
+}
+
+function costPerOz(bottleCost, bottleOz) {
+  return bottleCost / Math.max(0.01, bottleOz);
+}
+
+function ingredientCostInDrink(row) {
+  return costPerOz(Number(row.bottleCost), Number(row.bottleOz)) * Number(row.recipeOz);
+}
+
+// Pour cost % = (ingredient cost ÷ sale price) × 100 
+function pourCostPct(totalCost, salePrice) {
+  return (totalCost / Math.max(0.01, salePrice)) * 100;
+}
+
+// Suggested price derived from target pour cost:
+// sale price = cost / (targetPct/100)  (rearranged from pour cost equation) 
+function suggestedPrice(totalCost, targetPct) {
+  return totalCost / Math.max(0.01, (targetPct / 100));
+}
+
+// Variance concept from on-prem docs (baseline + variance adjustment) 
+function addVariance(baselinePrice, variancePct) {
+  return baselinePrice + (baselinePrice * (variancePct / 100));
+}
+
+function cmRender() {
+  cm.tbody().innerHTML = cm.rows.map(r => {
+    const cpo = costPerOz(Number(r.bottleCost), Number(r.bottleOz));
+    const cid = ingredientCostInDrink(r);
+
+    return `
+      <tr class="border-b border-white/5">
+        <td class="p-3">
+          <input data-k="name" data-id="${r.id}" value="${r.name}"
+            class="w-40 rounded-lg border border-white/10 bg-slate-950/40 px-2 py-1 text-sm" />
+        </td>
+
+        <td class="p-3 text-right">
+          <input data-k="bottleCost" data-id="${r.id}" type="number" value="${r.bottleCost}"
+            class="w-24 text-right rounded-lg border border-white/10 bg-slate-950/40 px-2 py-1 text-sm" />
+        </td>
+
+        <td class="p-3 text-right">
+          <input data-k="bottleOz" data-id="${r.id}" type="number" step="0.1" value="${r.bottleOz}"
+            class="w-24 text-right rounded-lg border border-white/10 bg-slate-950/40 px-2 py-1 text-sm" />
+        </td>
+
+        <td class="p-3 text-right">
+          <input data-k="recipeOz" data-id="${r.id}" type="number" step="0.1" value="${r.recipeOz}"
+            class="w-20 text-right rounded-lg border border-white/10 bg-slate-950/40 px-2 py-1 text-sm" />
+        </td>
+
+        <td class="p-3 text-right">${money(cpo)}</td>
+        <td class="p-3 text-right font-semibold">${money(cid)}</td>
+
+        <td class="p-3 text-right">
+          <button data-del="${r.id}" class="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs hover:bg-white/10">Delete</button>
+        </td>
+      </tr>
+    `;
+  }).join("");
+
+  // wire inputs
+  cm.tbody().querySelectorAll("input[data-id]").forEach(inp => {
+    inp.addEventListener("input", () => {
+      const id = inp.dataset.id;
+      const key = inp.dataset.k;
+      const row = cm.rows.find(x => x.id === id);
+      if (!row) return;
+      row[key] = inp.type === "number" ? Number(inp.value || 0) : inp.value;
+      cmCalculate();
+      cmRenderMenu();
+    });
+  });
+
+  // wire delete
+  cm.tbody().querySelectorAll("button[data-del]").forEach(btn => {
+    btn.addEventListener("click", () => cmRemoveIngredient(btn.dataset.del));
+  });
+
+  cmCalculate();
+  cmRenderMenu();
+}
+
+function cmCalculate() {
+  const totalCost = cm.rows.reduce((s, r) => s + ingredientCostInDrink(r), 0);
+  const target = cm.targetPct();
+  const variance = cm.variancePct();
+  const menuPrice = cm.menuPrice();
+
+  document.getElementById("cmTotalCost").textContent = money(totalCost);
+
+  const baseline = suggestedPrice(totalCost, target);
+  const adjusted = addVariance(baseline, variance);
+  const actualPC = pourCostPct(totalCost, menuPrice);
+  const gross = menuPrice - totalCost;
+
+  document.getElementById("cmResults").innerHTML = `
+    <div class="rounded-xl border border-white/10 bg-white/5 p-3">
+      <div><span class="text-slate-300">Suggested menu price (target ${target}%):</span> <b>${money(baseline)}</b></div>
+      <div><span class="text-slate-300">Suggested price w/ variance (${variance}%):</span> <b>${money(adjusted)}</b></div>
+      <div class="mt-2"><span class="text-slate-300">Using your menu price:</span> <b>${money(menuPrice)}</b></div>
+      <div><span class="text-slate-300">Actual pour cost:</span> <b>${actualPC.toFixed(1)}%</b></div>
+      <div class="${gross >= 0 ? "text-emerald-300" : "text-rose-300"}"><span class="text-slate-300">Gross per cocktail:</span> <b>${money(gross)}</b></div>
+    </div>
+  `;
+
+  cmRenderSwapDemo(totalCost, menuPrice, target, variance);
+}
+
+function cmRenderMenu() {
+  const out = document.getElementById("cmMenuList");
+  if (!out) return;
+
+  out.innerHTML = cm.menu.length
+    ? cm.menu.map((c, idx) => `
+      <div class="rounded-xl border border-white/10 bg-white/5 p-3 text-sm">
+        <div class="font-extrabold">${c.name}</div>
+        <div class="text-slate-300">Cost: <b>${money(c.cost)}</b> • Price: <b>${money(c.price)}</b> • Pour: <b>${c.pour.toFixed(1)}%</b></div>
+        <div class="text-slate-300">Gross: <b>${money(c.gross)}</b></div>
+      </div>
+    `).join("")
+    : `<div class="text-sm text-slate-400">No saved cocktails yet. Build one and click “Save cocktail to menu”.</div>`;
+}
+
+document.getElementById("cmSaveCocktailBtn")?.addEventListener("click", () => {
+  const totalCost = cm.rows.reduce((s, r) => s + ingredientCostInDrink(r), 0);
+  const price = cm.menuPrice();
+  const pour = pourCostPct(totalCost, price);
+  const gross = price - totalCost;
+
+  cm.menu.unshift({
+    name: `Cocktail ${cm.menu.length + 1}`,
+    cost: totalCost,
+    price,
+    pour,
+    gross
+  });
+
+  cmRenderMenu();
+});
+
+function cmRenderSwapDemo(totalCost, menuPrice, target, variance) {
+  const swapOut = document.getElementById("cmSwapOut");
+  if (!swapOut) return;
+
+  // Find tequila line if present, otherwise just demonstrate on first spirit-like line
+  const idx = cm.rows.findIndex(r => r.name.toLowerCase().includes("tequila"));
+  const baseRow = idx >= 0 ? cm.rows[idx] : cm.rows[0];
+  if (!baseRow) {
+    swapOut.innerHTML = `<div class="text-sm text-slate-400">Add ingredients to see swap simulation.</div>`;
+    return;
+  }
+
+  // Simulate premium vs value swap ($60 → $20) using same oz usage
+  const premium = { ...baseRow, bottleCost: 60 };
+  const value = { ...baseRow, bottleCost: 20 };
+
+  function computeVariant(rowVariant) {
+    const newTotal = cm.rows.reduce((s, r) => {
+      if (r.id === baseRow.id) return s + ingredientCostInDrink(rowVariant);
+      return s + ingredientCostInDrink(r);
+    }, 0);
+
+    const baseline = suggestedPrice(newTotal, target);
+    const adjusted = addVariance(baseline, variance);
+    const pc = pourCostPct(newTotal, menuPrice);
+    const gross = menuPrice - newTotal;
+
+    return { newTotal, baseline, adjusted, pc, gross };
+  }
+
+  const A = computeVariant(premium);
+  const B = computeVariant(value);
+
+  swapOut.innerHTML = `
+    <div class="rounded-xl border border-white/10 bg-white/5 p-3 text-sm">
+      <div class="font-extrabold">Premium bottle ($60)</div>
+      <div class="text-slate-300">New cocktail cost: <b>${money(A.newTotal)}</b></div>
+      <div class="text-slate-300">Pour cost: <b>${A.pc.toFixed(1)}%</b></div>
+      <div class="${A.gross >= 0 ? "text-emerald-300" : "text-rose-300"}">Gross: <b>${money(A.gross)}</b></div>
+    </div>
+    <div class="rounded-xl border border-white/10 bg-white/5 p-3 text-sm">
+      <div class="font-extrabold">Value bottle ($20)</div>
+      <div class="text-slate-300">New cocktail cost: <b>${money(B.newTotal)}</b></div>
+      <div class="text-slate-300">Pour cost: <b>${B.pc.toFixed(1)}%</b></div>
+      <div class="${B.gross >= 0 ? "text-emerald-300" : "text-rose-300"}">Gross: <b>${money(B.gross)}</b></div>
+    </div>
+  `;
+}
+
+// Buttons
+document.getElementById("cmAddIngredientBtn")?.addEventListener("click", () => cmAddIngredient());
+document.getElementById("cmCalcBtn")?.addEventListener("click", cmCalculate);
+
+// Seed cocktail example: tequila + lime + syrup + bitters
+cmAddIngredient({ name: "Tequila", bottleCost: 60, bottleOz: 25.4, recipeOz: 1.5 });
+cmAddIngredient({ name: "Lime Juice", bottleCost: 5, bottleOz: 16, recipeOz: 0.75 });  // demo bottle
+cmAddIngredient({ name: "Simple Syrup", bottleCost: 4, bottleOz: 16, recipeOz: 0.5 });
+cmAddIngredient({ name: "Bitters", bottleCost: 12, bottleOz: 5, recipeOz: 0.05 });
+cmRender();
+``
     // Footer year
     document.getElementById("year").textContent = new Date().getFullYear();
   </script>
