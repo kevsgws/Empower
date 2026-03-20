@@ -1,16 +1,24 @@
 
 :root{
-  --bg:#0b1220;
-  --panel:#121b2e;
-  --border:#223052;
-  --text:#eaf0ff;
-  --muted:#93a4c7;
-  --accent:#6ee7ff;
-  --accent2:#a78bfa;
-  --good:#34d399;
-  --bad:#fb7185;
-  --warn:#fbbf24;
+  /* Core surfaces */
+  --bg:#0b0b0b;              /* near-black */
+  --panel:#151515;           /* charcoal panel */
+  --border:#2a2a2a;          /* subtle border */
+
+  /* Text */
+  --text:#ffffff;            /* white */
+  --muted:#c7c7c7;           /* light gray */
+
+  /* SGWS / Proof brand */
+  --accent:#c8102e;          /* SGWS red */
+  --accent2:#9e0b23;         /* darker SGWS red */
+
+  /* Status */
+  --good:#2fbf71;            /* green (up) */
+  --bad:#c8102e;             /* red (down, on-brand) */
+  --warn:#f5a623;            /* amber */
 }
+
 *{box-sizing:border-box}
 body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;background:linear-gradient(180deg,#070b14,#0b1220);color:var(--text)}
 header{display:flex;gap:20px;align-items:center;padding:14px 24px;border-bottom:1px solid var(--border);background:rgba(11,18,32,.95)}
