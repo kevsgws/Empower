@@ -6,1178 +6,508 @@
   <title>Customer Insights Hub (Demo)</title>
   <meta name="description" content="Customer-facing insights hub demo. Dummy data only." />
 
-  <!-- Tailwind via CDN -->
+  <!-- Tailwind (light usage only) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Chart.js via CDN -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  <!-- SGWS / Proof Theme -->
   <style>
-    .glass{backdrop-filter: blur(10px); background: rgba(255,255,255,.06);}
-    html { scroll-behavior: smooth; }
+    :root{
+      --bg:#0b0b0b;
+      --panel:#151515;
+      --border:#2a2a2a;
+      --text:#ffffff;
+      --muted:#c7c7c7;
+
+      --accent:#c8102e;
+      --accent2:#9e0b23;
+
+      --good:#2fbf71;
+      --bad:#c8102e;
+      --warn:#f5a623;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:linear-gradient(180deg,#070707,#0b0b0b);
+      color:var(--text)
+    }
+
+    header{
+      display:flex;
+      gap:20px;
+      align-items:center;
+      padding:14px 24px;
+      border-bottom:1px solid var(--border);
+      background:rgba(11,11,11,.95)
+    }
+
+    .brand{font-weight:900;font-size:18px}
+
+    nav a{
+      margin-right:14px;
+      color:var(--muted);
+      text-decoration:none;
+      font-weight:600
+    }
+    nav a:hover{color:var(--accent)}
+
+    .container{max-width:1200px;margin:0 auto;padding:28px}
+
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .card{
+      grid-column:span 12;
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:16px
+    }
+
+    @media(min-width:900px){
+      .span6{grid-column:span 6}
+      .span8{grid-column:span 8}
+      .span4{grid-column:span 4}
+    }
+
+    .title{font-size:22px;font-weight:900}
+    .sub{color:var(--muted);font-size:13px;margin-top:6px}
+
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .kpi{
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:12px
+    }
+    .kpi .label{color:var(--muted);font-size:12px}
+    .kpi .value{font-size:24px;font-weight:900;margin-top:6px}
+
+    .delta.good{color:var(--good)}
+    .delta.bad{color:var(--bad)}
+
+    table{width:100%;border-collapse:collapse;font-size:13px}
+    th,td{padding:8px;border-bottom:1px solid var(--border)}
+    th{color:var(--muted);text-align:left}
+
+    .pill{
+      display:inline-block;
+      padding:4px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      font-size:12px;
+      margin:4px 6px 0 0;
+      color:var(--muted)
+    }
   </style>
 </head>
 
-<body class="min-h-screen bg-slate-950 text-slate-100">
-  <!-- Background glow -->
-  <div class="fixed inset-0 -z-10">
-    <div class="absolute -top-24 left-1/4 h-96 w-96 rounded-full bg-violet-500/25 blur-3xl"></div>
-    <div class="absolute top-16 right-1/4 h-96 w-96 rounded-full bg-emerald-400/20 blur-3xl"></div>
-    <div class="absolute bottom-0 left-0 h-72 w-72 rounded-full bg-sky-400/10 blur-3xl"></div>
-  </div>
+<body>
 
-  <!-- Top Nav -->
-  <header class="sticky top-0 z-20 border-b border-white/10 bg-slate-950/70 glass">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
-      <div class="flex items-center gap-3">
-        <div class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-violet-500 to-emerald-400 font-black">✦</div>
-        <div>
-          <div class="text-sm font-extrabold tracking-wide">Customer Insights Hub</div>
-          <div class="text-xs text-slate-300">Demo experience • dummy data only</div>
-        </div>
+<header>
+  <div class="brand">Customer Insights Hub</div>
+  <nav>
+    <a href="#overview">Overview</a>
+    <a href="#myBusiness">My Business</a>
+    <a href="#nearbyTrends">Trending Nearby</a>
+    <a href="#socialBuzz">Social Buzz</a>
+  </nav>
+</header>
+
+<main class="container">
+
+  <!-- OVERVIEW -->
+  <section id="overview" class="grid">
+    <div class="card span8">
+      <div class="title">
+        Grow smarter with <span style="color:var(--accent)">actionable insights</span>
       </div>
-
-      <nav class="hidden gap-4 text-sm text-slate-300 md:flex">
-        <a href="#overview" class="hover:text-white">Overview</a>
-        <a href="#myBusiness" class="hover:text-white">My Business</a>
-        <a href="#nearbyTrends" class="hover:text-white">Trending Nearby</a>
-        <a href="#socialBuzz" class="hover:text-white">Social Buzz</a>
-        <a href="#menuBuilder" class="hover:text-white">Menu Builder</a>
-        <a href="#perfectDisplay" class="hover:text-white">Perfect Display</a>
-        <a href="#tools" class="hover:text-white">Tools</a>
-        <a href="#cocktailMenu" class="hover:text-white">Menu Costing</a>
-        <a href="#promotions" class="hover:text-white">Promotions</a>
-        <a href="#rep" class="hover:text-white">Rep Connection</a>
-        <a href="#support" class="hover:text-white">Support</a>
-      </nav>
-
-      <div class="flex items-center gap-2">
-        <button id="themeBtn" class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">Toggle theme</button>
-        <button id="exportBtn" class="rounded-xl bg-gradient-to-r from-violet-500 to-emerald-400 px-3 py-2 text-sm font-bold text-slate-950 hover:brightness-110 transition">Export</button>
-      </div>
+      <p class="sub">
+        A Proof-style customer experience highlighting trends, momentum, and opportunities.
+      </p>
     </div>
-  </header>
 
-  <!-- Hero + Filters + Quick actions -->
-  <section class="mx-auto max-w-6xl px-4 pt-10">
-    <div id="overview" class="rounded-3xl border border-white/10 bg-white/5 p-6 glass">
-      <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-        <div>
-          <h1 class="text-3xl font-black leading-tight md:text-4xl">
-            Grow smarter with
-            <span class="bg-gradient-to-r from-violet-400 to-emerald-300 bg-clip-text text-transparent">
-              actionable insights
-            </span>.
-          </h1>
-          <p class="mt-2 max-w-2xl text-slate-300">
-            A customer-facing hub concept that surfaces trends, recommendations, promotions, and tools—all in a few clicks.
-          </p>
-        </div>
+    <div class="card span4">
+      <div class="sub">Filters (demo)</div>
+      <select class="w-full mt-2 bg-black border border-[var(--border)] p-2 rounded">
+        <option>All Regions</option>
+        <option>North Bay</option>
+        <option>East Bay</option>
+      </select>
+      <select class="w-full mt-2 bg-black border border-[var(--border)] p-2 rounded">
+        <option>On‑Premise</option>
+        <option>Off‑Premise</option>
+      </select>
+    </div>
+  </section>
 
-        <div class="grid w-full gap-3 md:w-auto md:grid-cols-3">
-          <select id="geo" class="rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm">
-            <option>All Regions</option>
-            <option>North Bay</option>
-            <option>East Bay</option>
-            <option>South Bay</option>
-          </select>
-          <select id="channel" class="rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm">
-            <option>All Channels</option>
-            <option>Off-Premise</option>
-            <option>On-Premise</option>
-          </select>
-          <select id="time" class="rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm">
-            <option>Last 30 days</option>
-            <option>Last 7 days</option>
-            <option>Quarter to date</option>
-            <option>Year to date</option>
-          </select>
-        </div>
+  <!-- KPIs -->
+  <section class="card mt-4">
+    <div class="kpis">
+      <div class="kpi">
+        <div class="label">Estimated Orders</div>
+        <div id="kpiOrders" class="value">—</div>
+        <div id="kpiOrdersDelta" class="delta good">—</div>
       </div>
-
-      <div class="mt-6 grid gap-4 md:grid-cols-4">
-        <button class="group rounded-2xl border border-white/10 bg-slate-900/30 p-4 text-left hover:bg-white/10 transition">
-          <div class="text-xs text-slate-300">Quick Action</div>
-          <div class="mt-1 text-lg font-extrabold">Reorder Fast</div>
-          <div class="mt-2 text-sm text-slate-300">One-click starter cart from top movers.</div>
-          <div class="mt-3 text-xs text-slate-400 group-hover:text-slate-200">Open →</div>
-        </button>
-
-        <button class="group rounded-2xl border border-white/10 bg-slate-900/30 p-4 text-left hover:bg-white/10 transition">
-          <div class="text-xs text-slate-300">Quick Action</div>
-          <div class="mt-1 text-lg font-extrabold">Find Deals</div>
-          <div class="mt-2 text-sm text-slate-300">Browse promotions & best values.</div>
-          <div class="mt-3 text-xs text-slate-400 group-hover:text-slate-200">Open →</div>
-        </button>
-
-        <button class="group rounded-2xl border border-white/10 bg-slate-900/30 p-4 text-left hover:bg-white/10 transition">
-          <div class="text-xs text-slate-300">Quick Action</div>
-          <div class="mt-1 text-lg font-extrabold">Track Orders</div>
-          <div class="mt-2 text-sm text-slate-300">Delivery status + open orders.</div>
-          <div class="mt-3 text-xs text-slate-400 group-hover:text-slate-200">Open →</div>
-        </button>
-
-        <button class="group rounded-2xl border border-white/10 bg-slate-900/30 p-4 text-left hover:bg-white/10 transition">
-          <div class="text-xs text-slate-300">Quick Action</div>
-          <div class="mt-1 text-lg font-extrabold">Get Support</div>
-          <div class="mt-2 text-sm text-slate-300">Help articles + contact options.</div>
-          <div class="mt-3 text-xs text-slate-400 group-hover:text-slate-200">Open →</div>
-        </button>
+      <div class="kpi">
+        <div class="label">Estimated Spend</div>
+        <div id="kpiSpend" class="value">—</div>
+        <div id="kpiSpendDelta" class="delta good">—</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Avg Basket</div>
+        <div id="kpiBasket" class="value">—</div>
+        <div id="kpiBasketDelta" class="delta bad">—</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Trending Right Now</div>
+        <div id="kpiTrend" class="value" style="font-size:18px">—</div>
       </div>
     </div>
   </section>
 
-  <!-- KPI row -->
-  <section class="mx-auto max-w-6xl px-4 py-8">
-    <div class="grid gap-4 md:grid-cols-4">
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-4 glass">
-        <div class="text-xs text-slate-300">Estimated Orders</div>
-        <div id="kpiOrders" class="mt-1 text-3xl font-black">—</div>
-        <div id="kpiOrdersDelta" class="mt-2 text-xs">—</div>
-      </div>
+  <!-- MY BUSINESS -->
+  <section id="myBusiness" class="card mt-6">
+    <div class="title">My Business</div>
+    <p class="sub">What’s working — and what needs attention.</p>
 
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-4 glass">
-        <div class="text-xs text-slate-300">Estimated Spend</div>
-        <div id="kpiSpend" class="mt-1 text-3xl font-black">—</div>
-        <div id="kpiSpendDelta" class="mt-2 text-xs">—</div>
-      </div>
-
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-4 glass">
-        <div class="text-xs text-slate-300">Avg Basket Size</div>
-        <div id="kpiBasket" class="mt-1 text-3xl font-black">—</div>
-        <div id="kpiBasketDelta" class="mt-2 text-xs">—</div>
-      </div>
-
-      <div class="rounded-2xl border border-white/10 bg-white/5 p-4 glass">
-        <div class="text-xs text-slate-300">Trending Right Now</div>
-        <div id="kpiTrend" class="mt-1 text-xl font-extrabold">—</div>
-        <div class="mt-2 text-xs text-slate-300">Updated today</div>
-      </div>
-    </div>
-
-    <div class="mt-4 grid gap-4 md:grid-cols-2">
-      <div class="rounded-3xl border border-white/10 bg-white/5 p-5 glass">
-        <div class="flex items-center justify-between">
-          <h2 class="text-lg font-extrabold">Spend Trend</h2>
-          <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">Dummy data</span>
-        </div>
-        <div class="mt-4">
-          <canvas id="trendChart" height="140"></canvas>
-        </div>
-      </div>
-
-      <div class="rounded-3xl border border-white/10 bg-white/5 p-5 glass">
-        <div class="flex items-center justify-between">
-          <h2 class="text-lg font-extrabold">Top Categories</h2>
-          <span class="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-300">Dummy data</span>
-        </div>
-        <div class="mt-4">
-          <canvas id="catChart" height="140"></canvas>
-        </div>
-      </div>
-    </div><!-- My Business -->
-    <section id="myBusiness" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
-      <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-        <div>
-          <h2 class="text-xl font-black">My Business</h2>
-          <p class="mt-1 text-sm text-slate-300">
-            Top items, spend, and reorder signals (demo).
-          </p>
-        </div>
-        <div class="flex gap-2">
-          <button class="rangeBtn rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition" data-days="30">30 days</button>
-          <button class="rangeBtn rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition" data-days="60">60 days</button>
-          <button class="rangeBtn rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition" data-days="90">90 days</button>
-        </div>
-      </div>
-
-      <div class="mt-4 grid gap-4 md:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="text-xs text-slate-300">Total Spend (YTD)</div>
-          <div id="ytdSpend" class="mt-1 text-3xl font-black">—</div>
-          <div class="mt-2 text-xs text-slate-400">Demo value</div>
-        </div>
-
-        <div class="md:col-span-2 rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="flex items-center justify-between">
-            <div class="font-extrabold">Top 10 Items</div>
-            <div id="rangeLabel" class="text-xs text-slate-300">Last 30 days</div>
-          </div>
-
-          <div class="mt-3 overflow-auto">
-            <table class="w-full text-sm">
-              <thead class="text-slate-300">
-                <tr class="border-b border-white/10">
-                  <th class="py-2 text-left">Item</th>
-                  <th class="py-2 text-right">Units</th>
-                  <th class="py-2 text-right">Spend</th>
-                </tr>
-              </thead>
-              <tbody id="topItemsTbody"></tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Trending Nearby -->
-    <section id="nearbyTrends" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
-      <div class="flex items-end justify-between gap-4">
-        <div>
-          <h2 class="text-xl font-black">Trending Nearby</h2>
-          <p class="mt-1 text-sm text-slate-300">
-            What similar businesses are buying around you (demo).
-          </p>
-        </div>
-        <select id="radius" class="rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm">
-          <option>Similar businesses</option>
-          <option>Within 5 miles</option>
-          <option>Within 10 miles</option>
-          <option>Within 25 miles</option>
-        </select>
-      </div>
-
-      <div class="mt-4 grid gap-4 md:grid-cols-2">
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Trending Categories</div>
-          <ul id="trendCats" class="mt-3 list-disc pl-5 text-slate-200"></ul>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Recommended Items</div>
-          <div id="trendItems" class="mt-3 grid gap-2"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Social Buzz -->
-    <section id="socialBuzz" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
-      <h2 class="text-xl font-black">Social Buzz</h2>
-      <p class="mt-1 text-sm text-slate-300">
-        What’s trending socially + ready-to-use post ideas (demo).
-      </p>
-
-      <div class="mt-4 grid gap-4 md:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">This Week’s Hype</div>
-          <ul id="hypeList" class="mt-3 list-disc pl-5 text-slate-200"></ul>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4 md:col-span-2">
-          <div class="font-extrabold">Post Templates</div>
-          <div id="postTemplates" class="mt-3 grid gap-3"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Menu Builder -->
-    <section id="menuBuilder" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
-      <h2 class="text-xl font-black">Menu Builder</h2>
-      <p class="mt-1 text-sm text-slate-300">
-        Build a cocktail from ingredients and estimate pour cost (demo).
-      </p>
-
-      <div class="mt-4 grid gap-4 md:grid-cols-2">
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Select Ingredients</div>
-          <div id="ingredientChips" class="mt-3 flex flex-wrap gap-2"></div>
-
-          <div class="mt-4 grid grid-cols-2 gap-3">
-            <div>
-              <label class="text-xs text-slate-300">Menu Price ($)</label>
-              <input id="menuPrice" type="number" value="14"
-                class="mt-1 w-full rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm" />
-            </div>
-            <div>
-              <label class="text-xs text-slate-300">Target Pour Cost %</label>
-              <input id="targetPour" type="number" value="20"
-                class="mt-1 w-full rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm" />
-            </div>
-          </div>
-
-          <button id="genCocktailBtn"
-            class="mt-4 w-full rounded-xl bg-gradient-to-r from-violet-500 to-emerald-400 px-3 py-2 text-sm font-bold text-slate-950 hover:brightness-110 transition">
-            Generate Cocktail
-          </button>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Cocktail Output</div>
-          <div id="cocktailOut" class="mt-3 text-sm text-slate-200">
-            Select ingredients and click “Generate Cocktail”.
-          </div>
-        </div>
-      </div>
-    </section>
-``<!-- Perfect Display -->
-    <section id="perfectDisplay" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
-      <div class="flex items-end justify-between gap-4">
-        <div>
-          <h2 class="text-xl font-black">Perfect Display</h2>
-          <p class="mt-1 text-sm text-slate-300">
-            A simple checklist to execute a great display (demo).
-          </p>
-        </div>
-        <div class="text-sm">
-          <span class="text-slate-300">Score:</span>
-          <span id="displayScore" class="font-black">0%</span>
-        </div>
-      </div>
-
-      <div class="mt-4 grid gap-4 md:grid-cols-2">
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Checklist</div>
-          <div id="displayChecks" class="mt-3 grid gap-2"></div>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Coaching Tips</div>
-          <ul class="mt-3 list-disc pl-5 text-slate-200">
-            <li>Keep it clean: straight facings, aligned price tags.</li>
-            <li>One clear theme: no clutter, strong sign visibility.</li>
-            <li>Maintain: refill, front, and keep secondary display tidy.</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- Tools -->
-    <section id="tools" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
-      <div>
-        <h2 class="text-xl font-black">Tools</h2>
-        <p class="mt-1 text-sm text-slate-300">
-          Quick calculators customers can actually use (demo).
-        </p>
-      </div>
-
-      <div class="mt-4 grid gap-4 md:grid-cols-2">
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Pour Cost Calculator</div>
-
-          <div class="mt-3 grid grid-cols-2 gap-3">
-            <div>
-              <label class="text-xs text-slate-300">Bottle cost ($)</label>
-              <input id="bottleCost" type="number" value="28"
-                class="mt-1 w-full rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm" />
-            </div>
-
-            <div>
-              <label class="text-xs text-slate-300">Bottle size</label>
-              <select id="bottleSize"
-                class="mt-1 w-full rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm">
-                <option value="25.4">750ml (25.4 oz)</option>
-                <option value="33.8">1L (33.8 oz)</option>
-                <option value="59.2">1.75L (59.2 oz)</option>
-              </select>
-            </div>
-
-            <div>
-              <label class="text-xs text-slate-300">Pour size (oz)</label>
-              <input id="pourOz" type="number" value="1.5" step="0.1"
-                class="mt-1 w-full rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm" />
-            </div>
-
-            <div>
-              <label class="text-xs text-slate-300">Target pour cost %</label>
-              <input id="targetPct" type="number" value="20"
-                class="mt-1 w-full rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm" />
-            </div>
-          </div>
-
-          <button id="calcPourBtn"
-            class="mt-4 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
-            Calculate
-          </button>
-
-          <div id="pourOut" class="mt-3 text-sm text-slate-200"></div>
-        </div>
-
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Quick Notes</div>
-          <ul class="mt-3 list-disc pl-5 text-slate-200">
-            <li>Cost per ounce = bottle cost ÷ ounces in bottle</li>
-            <li>Cost per pour = cost per ounce × pour size</li>
-            <li>Suggested menu price = cost per pour ÷ (target % / 100)</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-</section>   <!-- end Tools -->
-
-<!-- Cocktail Menu Costing & Pricing -->
-<section id="cocktailMenu" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
-  <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
-    <div>
-      <h2 class="text-xl font-black">Cocktail Menu Costing & Pricing</h2>
-      <p class="mt-1 text-sm text-slate-300">
-        Enter each ingredient (bottle cost + size + recipe amount). We calculate cost, suggested price, and compare premium vs value swaps (demo).
-      </p>
-    </div>
-
-    <div class="flex flex-wrap gap-2">
-      <div class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm">
-        Target Pour Cost %
-        <input id="cmTargetPct" type="number" value="20"
-          class="ml-2 w-16 rounded-lg border border-white/10 bg-slate-900/60 px-2 py-1 text-sm" />
-      </div>
-
-      <div class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm">
-        Variance %
-        <input id="cmVariancePct" type="number" value="20"
-          class="ml-2 w-16 rounded-lg border border-white/10 bg-slate-900/60 px-2 py-1 text-sm" />
-      </div>
-
-      <div class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm">
-        Menu Price ($)
-        <input id="cmMenuPrice" type="number" value="14"
-          class="ml-2 w-20 rounded-lg border border-white/10 bg-slate-900/60 px-2 py-1 text-sm" />
-      </div>
-
-      <button id="cmAddIngredientBtn"
-        class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
-        + Add ingredient
-      </button>
-
-      <button id="cmCalcBtn"
-        class="rounded-xl bg-gradient-to-r from-violet-500 to-emerald-400 px-3 py-2 text-sm font-bold text-slate-950 hover:brightness-110 transition">
-        Calculate
-      </button>
-    </div>
-  </div>
-
-  <div class="mt-4 grid gap-4 md:grid-cols-3">
-    <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4 md:col-span-2">
-      <div class="flex items-center justify-between">
-        <div class="font-extrabold">Build a cocktail (ingredients)</div>
-        <div class="text-xs text-slate-400">All numbers demo-safe</div>
-      </div>
-
-      <div class="mt-3 overflow-auto rounded-xl border border-white/10">
-        <table class="w-full text-sm">
-          <thead class="text-slate-300">
-            <tr class="border-b border-white/10">
-              <th class="p-3 text-left">Ingredient</th>
-              <th class="p-3 text-right">Bottle Cost</th>
-              <th class="p-3 text-right">Bottle Oz</th>
-              <th class="p-3 text-right">Recipe Oz</th>
-              <th class="p-3 text-right">Cost/Oz</th>
-              <th class="p-3 text-right">Cost in Drink</th>
-              <th class="p-3"></th>
-            </tr>
-          </thead>
-          <tbody id="cmTbody"></tbody>
+    <div class="grid mt-4">
+      <div class="card span6">
+        <div class="sub" style="color:var(--good);font-weight:700">Trending Up ↑</div>
+        <table>
+          <tbody id="trendUp"></tbody>
         </table>
       </div>
 
-      <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
-        <button id="cmSaveCocktailBtn"
-          class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
-          Save cocktail to menu
-        </button>
-
-        <div class="text-sm text-slate-300">
-          Total ingredient cost:
-          <span id="cmTotalCost" class="font-black text-white ml-1">—</span>
-        </div>
+      <div class="card span6">
+        <div class="sub" style="color:var(--bad);font-weight:700">Trending Down ↓</div>
+        <table>
+          <tbody id="trendDown"></tbody>
+        </table>
       </div>
     </div>
+  </section>
 
-    <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-      <div class="font-extrabold">Pricing results</div>
-      <div id="cmResults" class="mt-3 text-sm text-slate-200">
-        Add ingredients and click Calculate.
+  <!-- TRENDING NEARBY -->
+  <section id="nearbyTrends" class="card mt-6">
+    <div class="title">Trending Nearby</div>
+    <p class="sub">What similar businesses are leaning into.</p>
+
+    <div id="nearbyCats"></div>
+    <div id="nearbyItems" class="mt-2"></div>
+  </section>
+
+  <!-- SOCIAL BUZZ -->
+  <section id="socialBuzz" class="card mt-6">
+    <div class="title">Social Buzz</div>
+    <p class="sub">What’s resonating with guests right now.</p>
+
+    <ul id="socialTrends"></ul>
+    <ul id="socialIdeas" class="mt-2"></ul>
+  </section>
+<!-- MENU COSTING -->
+<section id="menuCosting" class="card mt-6">
+  <div class="title">Menu Costing & Profit Builder</div>
+  <p class="sub">
+    Build a cocktail, understand pour cost, and compare premium vs value bottles (demo).
+  </p>
+
+  <div class="grid mt-4">
+    <!-- INGREDIENT INPUT -->
+    <div class="card span6">
+      <div class="sub">Cocktail Ingredients</div>
+
+      <table class="table mt-2">
+        <thead>
+          <tr>
+            <th>Ingredient</th>
+            <th>Bottle $</th>
+            <th>Bottle oz</th>
+            <th>Recipe oz</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="cocktailRows"></tbody>
+      </table>
+
+      <button id="addIngredientBtn"
+        class="mt-3 rounded border border-[var(--border)] px-3 py-2 text-sm">
+        + Add ingredient
+      </button>
+    </div>
+
+    <!-- RESULTS -->
+    <div class="card span6">
+      <div class="sub">Pricing Results</div>
+
+      <div class="mt-2">
+        <label class="sub">Menu Price ($)</label>
+        <input id="menuPriceInput" type="number" value="14"
+          class="w-full mt-1 bg-black border border-[var(--border)] p-2 rounded" />
       </div>
-      <div class="mt-3 text-xs text-slate-400">
-        Based on pour cost % = cost ÷ sale price (and variance). 
+
+      <div class="mt-4" id="menuResults"></div>
+
+      <div class="mt-4">
+        <div class="sub">Swap Scenario (Spirit Only)</div>
+        <div id="swapResults" class="mt-2"></div>
       </div>
     </div>
   </div>
+</section>
+  <!-- PROMOTIONS -->
+<section id="promotions" class="card mt-6">
+  <div class="title">Promotions Planner</div>
+  <p class="sub">
+    Simple promotion ideas designed to drive traffic, trial, and margin (demo).
+  </p>
 
-  <div class="mt-4 grid gap-4 md:grid-cols-2">
-    <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-      <div class="font-extrabold">Saved menu (multiple cocktails)</div>
-      <div id="cmMenuList" class="mt-3 grid gap-2"></div>
+  <div class="grid mt-4">
+    <div class="card span6">
+      <div class="sub">Available Promotions</div>
+      <ul id="promoList" class="mt-2"></ul>
     </div>
 
-    <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-      <div class="font-extrabold">Swap simulator (premium vs value)</div>
-      <div class="mt-2 text-sm text-slate-300">
-        Example: Swap $60 tequila to $20 tequila and see the new pour cost & gross.
-      </div>
-      <div id="cmSwapOut" class="mt-3 grid gap-2"></div>
+    <div class="card span6">
+      <div class="sub">Your Promotion Plan</div>
+      <ul id="promoPlan" class="mt-2"></ul>
     </div>
   </div>
 </section>
 
-<!-- Promotions -->
-<section id="promotions" ...
-    <!-- Promotions -->
-    <section id="promotions" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
-      <div>
-        <h2 class="text-xl font-black">Promotions Planner</h2>
-        <p class="mt-1 text-sm text-slate-300">
-          Simple promo ideas + a plan for the month (demo).
-        </p>
-      </div>
+<!-- SUPPORT -->
+<section id="support" class="card mt-6">
+  <div class="title">Support</div>
+  <p class="sub">
+    Get help, resources, or connect with your support team (demo).
+  </p>
 
-      <div class="mt-4 grid gap-4 md:grid-cols-2">
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Featured promos</div>
-          <div id="promoCards" class="mt-3 grid gap-3"></div>
-        </div>
+  <div class="grid mt-4">
+    <div class="card span4">
+      <div class="sub">Guides & Tutorials</div>
+      <p class="sub">Quick how‑tos and best practices.</p>
+    </div>
 
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Plan builder</div>
-          <div class="mt-3 text-sm text-slate-300">Pick 2 promos + 1 menu highlight + 1 display goal.</div>
-          <div id="planOut" class="mt-3 grid gap-2"></div>
-        </div>
-      </div>
-    </section>
+    <div class="card span4">
+      <div class="sub">FAQ</div>
+      <p class="sub">Answers to common ordering and menu questions.</p>
+    </div>
 
-    <!-- Rep connection -->
-    <section id="rep" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
-      <div>
-        <h2 class="text-xl font-black">Rep Connection</h2>
-        <p class="mt-1 text-sm text-slate-300">
-          A simple way to connect with your support team (demo).
-        </p>
-      </div>
+    <div class="card span4">
+      <div class="sub">Contact Support</div>
+      <p class="sub">Chat or email with a support specialist.</p>
+    </div>
+  </div>
+</section>
 
-      <div class="mt-4 grid gap-4 md:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Your Account Specialist</div>
-          <div class="mt-2 text-slate-300">Name: Taylor (Demo)</div>
-          <div class="text-slate-300">Response: Within 1 business day</div>
-          <button class="mt-3 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
-            Message
-          </button>
-        </div>
+<!-- FOOTER -->
+<footer class="mt-10 text-center sub">
+  © <span id="year"></span> Customer Insights Hub • Demo experience only
+</footer>
+</main>
 
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Your Sales Consultant</div>
-          <div class="mt-2 text-slate-300">Name: Jordan (Demo)</div>
-          <div class="text-slate-300">Best for: Menu ideas & planning</div>
-          <button class="mt-3 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
-            Schedule a call
-          </button>
-        </div>
+<!-- ✅ ONE SCRIPT — EVERYTHING LIVES HERE -->
+<script>
+  const money = n =>
+    new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n);
 
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Service</div>
-          <div class="mt-2 text-slate-300">Track issues & history (demo)</div>
-          <button class="mt-3 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
-            Open support
-          </button>
-        </div>
-      </div>
-    </section>
+  const rand = (min,max)=>Math.floor(Math.random()*(max-min+1))+min;
 
-    <!-- Support -->
-    <section id="support" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
-      <h2 class="text-xl font-black">Support</h2>
-      <p class="mt-1 text-sm text-slate-300">Simple help entry points for customers.</p>
+  // KPIs
+  const orders = rand(320,980);
+  const spend = rand(180000,720000);
+  const basket = Math.round(spend / orders);
 
-      <div class="mt-4 grid gap-4 md:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">How-to Guides</div>
-          <div class="mt-2 text-sm text-slate-300">Short tutorials and quick starts.</div>
-        </div>
+  document.getElementById("kpiOrders").textContent = orders.toLocaleString();
+  document.getElementById("kpiSpend").textContent = money(spend);
+  document.getElementById("kpiBasket").textContent = money(basket);
 
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">FAQ</div>
-          <div class="mt-2 text-sm text-slate-300">Answers to common ordering questions.</div>
-        </div>
+  document.getElementById("kpiOrdersDelta").textContent = "▲ 6%";
+  document.getElementById("kpiSpendDelta").textContent = "▲ 4%";
+  document.getElementById("kpiBasketDelta").textContent = "▼ 2%";
 
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
-          <div class="font-extrabold">Contact</div>
-          <div class="mt-2 text-sm text-slate-300">Email/chat placeholder for a real support flow.</div>
-        </div>
-      </div>
-    </section>
+  document.getElementById("kpiTrend").textContent =
+    ["Tequila ↑","RTDs ↑","Premium Vodka ↓","Espresso Martini ↑"][rand(0,3)];
 
-    <footer class="py-8 text-center text-xs text-slate-400">
-      © <span id="year"></span> Customer Insights Hub (Demo) • Dummy data only
-    </footer>
-  </section><script>
-    // Helpers
-    const money = (n) => new Intl.NumberFormat(undefined, {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0
-    }).format(n);
+  // My Business
+  const movers = [
+    { name: "Premium Tequila", delta: 4200 },
+    { name: "RTD Cocktails", delta: 3100 },
+    { name: "Craft Vodka", delta: 1800 },
+    { name: "Imported Whiskey", delta: -900 },
+    { name: "Flavored Rum", delta: -1400 },
+    { name: "Value Gin", delta: -2200 }
+  ];
 
-    const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
-    // KPIs
-    const orders = rand(320, 980);
-    const spend = rand(180000, 720000);
-    const basket = Math.round(spend / Math.max(1, orders));
-
-    document.getElementById("kpiOrders").textContent = orders.toLocaleString();
-    document.getElementById("kpiSpend").textContent = money(spend);
-    document.getElementById("kpiBasket").textContent = money(basket);
-    document.getElementById("kpiTrend").textContent = ["Premium Picks ↑","RTDs ↑","Tequila ↑","Espresso Martini ↑"][rand(0,3)];
-
-    const delta = () => rand(-6, 16);
-    const setDelta = (id) => {
-      const v = delta();
-      const el = document.getElementById(id);
-      el.textContent = `${v >= 0 ? "▲" : "▼"} ${Math.abs(v)}% vs prior`;
-      el.className = `mt-2 text-xs ${v >= 0 ? "text-emerald-300" : "text-rose-300"}`;
-    };
-    setDelta("kpiOrdersDelta");
-    setDelta("kpiSpendDelta");
-    setDelta("kpiBasketDelta");
-
-    // Charts (Chart.js)
-    const trendData = Array.from({ length: 12 }, () => rand(40, 140));
-    new Chart(document.getElementById("trendChart"), {
-      type: "line",
-      data: {
-        labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
-        datasets: [{
-          label: "Spend index (demo)",
-          data: trendData,
-          borderWidth: 3,
-          borderColor: "rgba(167,139,250,1)",
-          backgroundColor: "rgba(52,211,153,.15)",
-          tension: .35,
-          fill: true,
-          pointRadius: 3,
-          pointBackgroundColor: "white"
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { labels: { color: "#cbd5e1" } } },
-        scales: {
-          x: { ticks: { color: "#94a3b8" }, grid: { color: "rgba(255,255,255,.06)" } },
-          y: { ticks: { color: "#94a3b8" }, grid: { color: "rgba(255,255,255,.06)" } }
-        }
-      }
-    });
-
-    new Chart(document.getElementById("catChart"), {
-      type: "bar",
-      data: {
-        labels: ["Category A","Category B","Category C","Category D","Category E"],
-        datasets: [{
-          label: "Share (demo)",
-          data: [rand(10,35), rand(10,35), rand(8,28), rand(6,22), rand(6,20)],
-          backgroundColor: [
-            "rgba(52,211,153,.65)",
-            "rgba(167,139,250,.65)",
-            "rgba(56,189,248,.65)",
-            "rgba(251,191,36,.65)",
-            "rgba(244,63,94,.55)"
-          ],
-          borderColor: "rgba(255,255,255,.08)",
-          borderWidth: 1
-        }]
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { labels: { color: "#cbd5e1" } } },
-        scales: {
-          x: { ticks: { color: "#94a3b8" }, grid: { display: false } },
-          y: { ticks: { color: "#94a3b8" }, grid: { color: "rgba(255,255,255,.06)" } }
-        }
-      }
-    });
-
-    // My Business: Top items (30/60/90) + YTD
-    const demoPurchases = Array.from({ length: 40 }, (_, i) => ({
-      name: `Item ${i + 1}`,
-      units30: rand(10, 99),
-      units60: rand(20, 180),
-      units90: rand(30, 260),
-      spend30: rand(800, 9800),
-      spend60: rand(1200, 16800),
-      spend90: rand(1600, 22800)
-    }));
-
-    const ytdSpendVal = demoPurchases.reduce((s, x) => s + x.spend90, 0);
-    document.getElementById("ytdSpend").textContent = money(ytdSpendVal);
-
-    function renderTopItems(days) {
-      document.getElementById("rangeLabel").textContent = `Last ${days} days`;
-      const keyU = `units${days}`;
-      const keyS = `spend${days}`;
-      const top = [...demoPurchases].sort((a, b) => b[keyS] - a[keyS]).slice(0, 10);
-
-      document.getElementById("topItemsTbody").innerHTML = top.map(x => `
-        <tr class="border-b border-white/5">
-          <td class="py-2">${x.name}</td>
-          <td class="py-2 text-right">${x[keyU].toLocaleString()}</td>
-          <td class="py-2 text-right">${money(x[keyS])}</td>
-        </tr>
-      `).join("");
-    }
-
-    document.querySelectorAll(".rangeBtn").forEach(btn => {
-      btn.addEventListener("click", () => renderTopItems(btn.dataset.days));
-    });
-    renderTopItems(30);
-
-    // Trending Nearby
-    const cats = ["Tequila","Vodka","Whiskey","RTD","Sparkling","Liqueurs","Mixers","NA options"];
-    document.getElementById("trendCats").innerHTML =
-      [...cats].sort(() => Math.random() - 0.5).slice(0, 5)
-        .map(c => `<li>${c} trending ↑</li>`).join("");
-
-    document.getElementById("trendItems").innerHTML = Array.from({ length: 5 }, (_, i) => {
-      const c = cats[rand(0, cats.length - 1)];
-      return `
-        <div class="rounded-xl border border-white/10 bg-white/5 p-3 text-sm">
-          <div class="font-extrabold">${c} Pick ${i + 1}</div>
-          <div class="text-slate-300">Popular with similar businesses.</div>
-        </div>
-      `;
-    }).join("");
-
-    // Social Buzz
-    const hype = [
-      "Espresso martini flights",
-      "Spicy margarita riffs",
-      "Low-ABV spritz",
-      "Mini cocktail cans",
-      "Charcuterie pairings",
-      "Mocktail menus",
-      "Late-night bundles"
-    ];
-    document.getElementById("hypeList").innerHTML = hype.slice(0, 5).map(x => `<li>${x}</li>`).join("");
-
-    const templates = [
-      { t: "New This Week", b: "Try our new feature cocktail — limited time only." },
-      { t: "Staff Pick", b: "Ask your bartender what they’re pouring this weekend." },
-      { t: "Happy Hour", b: "Two hours. Two cocktails. One great night." }
-    ];
-    document.getElementById("postTemplates").innerHTML = templates.map(x => `
-      <div class="rounded-xl border border-white/10 bg-white/5 p-3">
-        <div class="font-extrabold">${x.t}</div>
-        <div class="mt-1 text-slate-300">${x.b}</div>
-        <div class="mt-2 text-xs text-slate-400">Copy/paste caption</div>
-      </div>
+  document.getElementById("trendUp").innerHTML =
+    movers.filter(x=>x.delta>0).map(x=>`
+      <tr><td>${x.name}</td><td class="delta good">▲ ${money(x.delta)}</td></tr>
     `).join("");
 
-    // Menu Builder: ingredient chips + recipe + pour cost
-    const ingredients = [
-      { key: "Vodka", costPerOz: 0.80 },
-      { key: "Tequila", costPerOz: 0.95 },
-      { key: "Whiskey", costPerOz: 1.05 },
-      { key: "Lime", costPerOz: 0.20 },
-      { key: "Lemon", costPerOz: 0.20 },
-      { key: "Simple Syrup", costPerOz: 0.15 },
-      { key: "Honey Syrup", costPerOz: 0.22 },
-      { key: "Ginger Beer", costPerOz: 0.18 },
-      { key: "Espresso", costPerOz: 0.35 },
-      { key: "Bitters", costPerOz: 0.10 }
-    ];
-
-    const chosen = new Set();
-    document.getElementById("ingredientChips").innerHTML = ingredients.map(i =>
-      `<button class="chipBtn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200 hover:bg-white/10 transition" data-key="${i.key}">${i.key}</button>`
-    ).join("");
-
-    document.querySelectorAll(".chipBtn").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const k = btn.dataset.key;
-        if (chosen.has(k)) {
-          chosen.delete(k);
-          btn.classList.remove("ring-2","ring-emerald-400");
-        } else {
-          chosen.add(k);
-          btn.classList.add("ring-2","ring-emerald-400");
-        }
-      });
-    });
-
-    const getCost = (key) => (ingredients.find(x => x.key === key)?.costPerOz ?? 0.2);
-    const pourCostPct = (drinkCost, salePrice) => (drinkCost / Math.max(0.01, salePrice)) * 100;
-
-    document.getElementById("genCocktailBtn").addEventListener("click", () => {
-      const picks = [...chosen];
-      const salePrice = Number(document.getElementById("menuPrice").value || 14);
-
-      const spirit = picks.find(p => ["Vodka","Tequila","Whiskey"].includes(p)) || "Tequila";
-      const citrus = picks.find(p => ["Lime","Lemon"].includes(p)) || "Lime";
-      const sweet  = picks.find(p => ["Simple Syrup","Honey Syrup"].includes(p)) || "Simple Syrup";
-      const mixer  = picks.find(p => ["Ginger Beer","Espresso"].includes(p)) || null;
-
-      const recipe = [
-        { name: spirit, oz: 1.5 },
-        { name: citrus, oz: 0.75 },
-        { name: sweet,  oz: 0.5 }
-      ];
-      if (mixer) recipe.push({ name: mixer, oz: 2.0 });
-
-      const drinkCost = recipe.reduce((sum, r) => sum + r.oz * getCost(r.name), 0);
-      const pc = pourCostPct(drinkCost, salePrice);
-
-      const steps =
-        mixer === "Ginger Beer" ? "Build over ice, top with ginger beer, garnish with lime wheel." :
-        mixer === "Espresso" ? "Shake hard with ice, strain into coupe, garnish with 3 coffee beans." :
-        "Shake with ice, strain into rocks over fresh ice, garnish.";
-
-      document.getElementById("cocktailOut").innerHTML = `
-        <div class="text-lg font-extrabold">${spirit} Signature</div>
-        <div class="mt-2 text-slate-300">${steps}</div>
-        <div class="mt-3 rounded-xl border border-white/10 bg-white/5 p-3">
-          <div class="text-xs text-slate-300">Recipe</div>
-          <ul class="mt-2 list-disc pl-5">
-            ${recipe.map(r => `<li>${r.oz} oz ${r.name}</li>`).join("")}
-          </ul>
-          <div class="mt-3 grid grid-cols-2 gap-3 text-sm">
-            <div><span class="text-slate-300">Est. drink cost:</span> <b>${money(drinkCost)}</b></div>
-            <div><span class="text-slate-300">Pour cost:</span> <b>${pc.toFixed(1)}%</b></div>
-          </div>
-        </div>
-      `;
-    });
-
-    // Perfect Display checklist + score
-    const checks = [
-      "Price tags visible and aligned",
-      "Facing straight + product pulled forward",
-      "Display has a clear theme/message",
-      "Signage is clean and readable",
-      "Secondary display maintained",
-      "Out-of-stocks addressed",
-      "No clutter / no damaged materials"
-    ];
-
-    const checkWrap = document.getElementById("displayChecks");
-    checkWrap.innerHTML = checks.map((c, i) => `
-      <label class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3">
-        <input type="checkbox" class="dispCheck h-4 w-4" data-i="${i}" />
-        <span class="text-sm">${c}</span>
-      </label>
+  document.getElementById("trendDown").innerHTML =
+    movers.filter(x=>x.delta<0).map(x=>`
+      <tr><td>${x.name}</td><td class="delta bad">▼ ${money(Math.abs(x.delta))}</td></tr>
     `).join("");
 
-    function updateDisplayScore() {
-      const total = document.querySelectorAll(".dispCheck").length;
-      const on = [...document.querySelectorAll(".dispCheck")].filter(x => x.checked).length;
-      const pct = Math.round((on / Math.max(1, total)) * 100);
-      document.getElementById("displayScore").textContent = `${pct}%`;
-    }
-    document.querySelectorAll(".dispCheck").forEach(cb => cb.addEventListener("change", updateDisplayScore));
+  // Trending Nearby
+  document.getElementById("nearbyCats").innerHTML =
+    ["Tequila","RTDs","Premium Vodka","Low‑ABV"].map(x=>`<span class="pill">${x}</span>`).join("");
 
-    // Tools: Pour Cost Calculator
-    function calcPour() {
-      const bottleCost = Number(document.getElementById("bottleCost").value || 0);
-      const bottleOz = Number(document.getElementById("bottleSize").value || 25.4);
-      const pourOz = Number(document.getElementById("pourOz").value || 1.5);
-      const targetPct = Number(document.getElementById("targetPct").value || 20);
+  document.getElementById("nearbyItems").innerHTML =
+    ["Spicy Margaritas","Espresso Martinis","Canned Cocktails"].map(x=>`<span class="pill">${x}</span>`).join("");
 
-      const costPerOz = bottleCost / Math.max(0.01, bottleOz);
-      const costPerPour = costPerOz * pourOz;
-      const suggestedPrice = costPerPour / Math.max(0.01, (targetPct / 100));
+  // Social Buzz
+  document.getElementById("socialTrends").innerHTML =
+    ["Espresso martini twists","Spicy cocktails","Mini flights"].map(x=>`<li>${x}</li>`).join("");
 
-      document.getElementById("pourOut").innerHTML = `
-        <div class="mt-2 rounded-xl border border-white/10 bg-white/5 p-3">
-          <div><span class="text-slate-300">Cost per oz:</span> <b>${money(costPerOz)}</b></div>
-          <div><span class="text-slate-300">Cost per pour:</span> <b>${money(costPerPour)}</b></div>
-          <div><span class="text-slate-300">Suggested menu price:</span> <b>${money(suggestedPrice)}</b></div>
-        </div>
-      `;
-    }
-    document.getElementById("calcPourBtn").addEventListener("click", calcPour);
-    calcPour();
-
-    // Promotions Planner
-    const promos = [
-      { title: "Seasonal Feature", desc: "Run one featured cocktail for 30 days with a simple menu callout." },
-      { title: "Bundle", desc: "Pair a top seller with a trade-up option to lift basket size." },
-      { title: "Happy Hour Push", desc: "Pick 2 items to spotlight during peak traffic windows." }
-    ];
-
-    const plan = [];
-    const promoWrap = document.getElementById("promoCards");
-    const planOut = document.getElementById("planOut");
-
-    function renderPlan() {
-      planOut.innerHTML = plan.length
-        ? plan.map(p => `<div class="rounded-xl border border-white/10 bg-white/5 p-3 text-sm"><b>${p}</b></div>`).join("")
-        : `<div class="text-sm text-slate-400">Select promos to build a plan.</div>`;
-    }
-
-    promoWrap.innerHTML = promos.map((p, idx) => `
-      <button class="promoBtn rounded-xl border border-white/10 bg-white/5 p-3 text-left hover:bg-white/10 transition" data-idx="${idx}">
-        <div class="font-extrabold">${p.title}</div>
-        <div class="mt-1 text-sm text-slate-300">${p.desc}</div>
-      </button>
-    `).join("");
-
-    document.querySelectorAll(".promoBtn").forEach(btn => btn.addEventListener("click", () => {
-      const p = promos[Number(btn.dataset.idx)];
-      if (!plan.includes(p.title)) plan.push(p.title);
-      renderPlan();
-    }));
-    renderPlan();
-
-    // Theme toggle
-    let light = false;
-    document.getElementById("themeBtn").addEventListener("click", () => {
-      light = !light;
-      document.body.className = light
-        ? "min-h-screen bg-slate-50 text-slate-900"
-        : "min-h-screen bg-slate-950 text-slate-100";
-    });
-
-    // Export
-    document.getElementById("exportBtn").addEventListener("click", () => {
-      const payload = {
-        filters: {
-          region: document.getElementById("geo").value,
-          channel: document.getElementById("channel").value,
-          timeframe: document.getElementById("time").value
-        },
-        kpis: { orders, spend, basket },
-        plan,
-        generatedAt: new Date().toISOString(),
-        note: "Demo export"
-      };
-
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "customer-insights-export.json";
-      a.click();
-      URL.revokeObjectURL(url);
-    });
-// ------------------------------
-// Cocktail Menu Costing (Multi-Ingredient) - Demo
-// ------------------------------
-const cm = {
-  rows: [],
-  menu: [],
-  tbody: () => document.getElementById("cmTbody"),
-  targetPct: () => Number(document.getElementById("cmTargetPct").value || 20),
-  variancePct: () => Number(document.getElementById("cmVariancePct").value || 20),
-  menuPrice: () => Number(document.getElementById("cmMenuPrice").value || 14)
+  document.getElementById("socialIdeas").innerHTML =
+    ["Feature a premium cocktail","Highlight staff picks","Limited‑time menu item"].map(x=>`<li>${x}</li>`).join("");
+  // ================================
+// MENU COSTING & COCKTAIL BUILDER
+// ================================
+const cocktail = {
+  ingredients: []
 };
 
-function cmAddIngredient(prefill = {}) {
-  const row = {
-    id: crypto?.randomUUID?.() || String(Math.random()),
-    name: prefill.name || "Tequila",
-    bottleCost: prefill.bottleCost ?? 60,
-    bottleOz: prefill.bottleOz ?? 25.4,     // 750ml default
-    recipeOz: prefill.recipeOz ?? 1.5
-  };
-  cm.rows.push(row);
-  cmRender();
+function addIngredientRow(data = {}) {
+  cocktail.ingredients.push({
+    name: data.name || "Tequila",
+    bottleCost: data.bottleCost ?? 60,
+    bottleOz: data.bottleOz ?? 25.4,
+    recipeOz: data.recipeOz ?? 1.5
+  });
+  renderCocktail();
 }
 
-function cmRemoveIngredient(id) {
-  cm.rows = cm.rows.filter(r => r.id !== id);
-  cmRender();
+function removeIngredient(idx) {
+  cocktail.ingredients.splice(idx, 1);
+  renderCocktail();
 }
 
-function costPerOz(bottleCost, bottleOz) {
-  return bottleCost / Math.max(0.01, bottleOz);
-}
+function renderCocktail() {
+  const tbody = document.getElementById("cocktailRows");
+  tbody.innerHTML = cocktail.ingredients.map((i, idx) => `
+    <tr>
+      <td><input value="${i.name}" data-k="name" data-i="${idx}" /></td>
+      <td><input type="number" value="${i.bottleCost}" data-k="bottleCost" data-i="${idx}" /></td>
+      <td><input type="number" value="${i.bottleOz}" data-k="bottleOz" data-i="${idx}" /></td>
+      <td><input type="number" value="${i.recipeOz}" data-k="recipeOz" data-i="${idx}" /></td>
+      <td><button onclick="removeIngredient(${idx})">✕</button></td>
+    </tr>
+  `).join("");
 
-function ingredientCostInDrink(row) {
-  return costPerOz(Number(row.bottleCost), Number(row.bottleOz)) * Number(row.recipeOz);
-}
-
-// Pour cost % = (ingredient cost ÷ sale price) × 100 
-function pourCostPct(totalCost, salePrice) {
-  return (totalCost / Math.max(0.01, salePrice)) * 100;
-}
-
-// Suggested price derived from target pour cost:
-// sale price = cost / (targetPct/100)  (rearranged from pour cost equation) 
-function suggestedPrice(totalCost, targetPct) {
-  return totalCost / Math.max(0.01, (targetPct / 100));
-}
-
-// Variance concept from on-prem docs (baseline + variance adjustment) 
-function addVariance(baselinePrice, variancePct) {
-  return baselinePrice + (baselinePrice * (variancePct / 100));
-}
-
-function cmRender() {
-  cm.tbody().innerHTML = cm.rows.map(r => {
-    const cpo = costPerOz(Number(r.bottleCost), Number(r.bottleOz));
-    const cid = ingredientCostInDrink(r);
-
-    return `
-      <tr class="border-b border-white/5">
-        <td class="p-3">
-          <input data-k="name" data-id="${r.id}" value="${r.name}"
-            class="w-40 rounded-lg border border-white/10 bg-slate-950/40 px-2 py-1 text-sm" />
-        </td>
-
-        <td class="p-3 text-right">
-          <input data-k="bottleCost" data-id="${r.id}" type="number" value="${r.bottleCost}"
-            class="w-24 text-right rounded-lg border border-white/10 bg-slate-950/40 px-2 py-1 text-sm" />
-        </td>
-
-        <td class="p-3 text-right">
-          <input data-k="bottleOz" data-id="${r.id}" type="number" step="0.1" value="${r.bottleOz}"
-            class="w-24 text-right rounded-lg border border-white/10 bg-slate-950/40 px-2 py-1 text-sm" />
-        </td>
-
-        <td class="p-3 text-right">
-          <input data-k="recipeOz" data-id="${r.id}" type="number" step="0.1" value="${r.recipeOz}"
-            class="w-20 text-right rounded-lg border border-white/10 bg-slate-950/40 px-2 py-1 text-sm" />
-        </td>
-
-        <td class="p-3 text-right">${money(cpo)}</td>
-        <td class="p-3 text-right font-semibold">${money(cid)}</td>
-
-        <td class="p-3 text-right">
-          <button data-del="${r.id}" class="rounded-lg border border-white/10 bg-white/5 px-2 py-1 text-xs hover:bg-white/10">Delete</button>
-        </td>
-      </tr>
-    `;
-  }).join("");
-
-  // wire inputs
-  cm.tbody().querySelectorAll("input[data-id]").forEach(inp => {
+  tbody.querySelectorAll("input").forEach(inp => {
     inp.addEventListener("input", () => {
-      const id = inp.dataset.id;
-      const key = inp.dataset.k;
-      const row = cm.rows.find(x => x.id === id);
-      if (!row) return;
-      row[key] = inp.type === "number" ? Number(inp.value || 0) : inp.value;
-      cmCalculate();
-      cmRenderMenu();
+      const i = inp.dataset.i;
+      const k = inp.dataset.k;
+      cocktail.ingredients[i][k] = inp.type === "number"
+        ? Number(inp.value)
+        : inp.value;
+      calculateMenu();
     });
   });
 
-  // wire delete
-  cm.tbody().querySelectorAll("button[data-del]").forEach(btn => {
-    btn.addEventListener("click", () => cmRemoveIngredient(btn.dataset.del));
-  });
-
-  cmCalculate();
-  cmRenderMenu();
+  calculateMenu();
 }
 
-function cmCalculate() {
-  const totalCost = cm.rows.reduce((s, r) => s + ingredientCostInDrink(r), 0);
-  const target = cm.targetPct();
-  const variance = cm.variancePct();
-  const menuPrice = cm.menuPrice();
+function calculateMenu() {
+  const menuPrice = Number(document.getElementById("menuPriceInput").value || 0);
 
-  document.getElementById("cmTotalCost").textContent = money(totalCost);
+  let totalCost = 0;
+  cocktail.ingredients.forEach(i => {
+    const costPerOz = i.bottleCost / i.bottleOz;
+    totalCost += costPerOz * i.recipeOz;
+  });
 
-  const baseline = suggestedPrice(totalCost, target);
-  const adjusted = addVariance(baseline, variance);
-  const actualPC = pourCostPct(totalCost, menuPrice);
+  const pourCostPct = menuPrice ? (totalCost / menuPrice) * 100 : 0;
   const gross = menuPrice - totalCost;
 
-  document.getElementById("cmResults").innerHTML = `
-    <div class="rounded-xl border border-white/10 bg-white/5 p-3">
-      <div><span class="text-slate-300">Suggested menu price (target ${target}%):</span> <b>${money(baseline)}</b></div>
-      <div><span class="text-slate-300">Suggested price w/ variance (${variance}%):</span> <b>${money(adjusted)}</b></div>
-      <div class="mt-2"><span class="text-slate-300">Using your menu price:</span> <b>${money(menuPrice)}</b></div>
-      <div><span class="text-slate-300">Actual pour cost:</span> <b>${actualPC.toFixed(1)}%</b></div>
-      <div class="${gross >= 0 ? "text-emerald-300" : "text-rose-300"}"><span class="text-slate-300">Gross per cocktail:</span> <b>${money(gross)}</b></div>
-    </div>
+  document.getElementById("menuResults").innerHTML = `
+    <div class="pill">Drink Cost: <b>${money(totalCost)}</b></div>
+    <div class="pill">Pour Cost: <b>${pourCostPct.toFixed(1)}%</b></div>
+    <div class="pill">Gross / Drink: <b>${money(gross)}</b></div>
   `;
 
-  cmRenderSwapDemo(totalCost, menuPrice, target, variance);
+  renderSwap(totalCost, menuPrice);
 }
 
-function cmRenderMenu() {
-  const out = document.getElementById("cmMenuList");
-  if (!out) return;
+function renderSwap(currentCost, menuPrice) {
+  if (!cocktail.ingredients.length) return;
 
-  out.innerHTML = cm.menu.length
-    ? cm.menu.map((c, idx) => `
-      <div class="rounded-xl border border-white/10 bg-white/5 p-3 text-sm">
-        <div class="font-extrabold">${c.name}</div>
-        <div class="text-slate-300">Cost: <b>${money(c.cost)}</b> • Price: <b>${money(c.price)}</b> • Pour: <b>${c.pour.toFixed(1)}%</b></div>
-        <div class="text-slate-300">Gross: <b>${money(c.gross)}</b></div>
-      </div>
-    `).join("")
-    : `<div class="text-sm text-slate-400">No saved cocktails yet. Build one and click “Save cocktail to menu”.</div>`;
-}
+  const base = cocktail.ingredients[0]; // assume first is spirit
+  const premium = { ...base, bottleCost: 60 };
+  const value = { ...base, bottleCost: 20 };
 
-document.getElementById("cmSaveCocktailBtn")?.addEventListener("click", () => {
-  const totalCost = cm.rows.reduce((s, r) => s + ingredientCostInDrink(r), 0);
-  const price = cm.menuPrice();
-  const pour = pourCostPct(totalCost, price);
-  const gross = price - totalCost;
+  function calcVariant(v) {
+    const costPerOz = v.bottleCost / v.bottleOz;
+    const newCost =
+      currentCost -
+      (base.bottleCost / base.bottleOz) * base.recipeOz +
+      costPerOz * base.recipeOz;
 
-  cm.menu.unshift({
-    name: `Cocktail ${cm.menu.length + 1}`,
-    cost: totalCost,
-    price,
-    pour,
-    gross
-  });
-
-  cmRenderMenu();
-});
-
-function cmRenderSwapDemo(totalCost, menuPrice, target, variance) {
-  const swapOut = document.getElementById("cmSwapOut");
-  if (!swapOut) return;
-
-  // Find tequila line if present, otherwise just demonstrate on first spirit-like line
-  const idx = cm.rows.findIndex(r => r.name.toLowerCase().includes("tequila"));
-  const baseRow = idx >= 0 ? cm.rows[idx] : cm.rows[0];
-  if (!baseRow) {
-    swapOut.innerHTML = `<div class="text-sm text-slate-400">Add ingredients to see swap simulation.</div>`;
-    return;
+    return {
+      cost: newCost,
+      pour: menuPrice ? (newCost / menuPrice) * 100 : 0,
+      gross: menuPrice - newCost
+    };
   }
 
-  // Simulate premium vs value swap ($60 → $20) using same oz usage
-  const premium = { ...baseRow, bottleCost: 60 };
-  const value = { ...baseRow, bottleCost: 20 };
+  const A = calcVariant(premium);
+  const B = calcVariant(value);
 
-  function computeVariant(rowVariant) {
-    const newTotal = cm.rows.reduce((s, r) => {
-      if (r.id === baseRow.id) return s + ingredientCostInDrink(rowVariant);
-      return s + ingredientCostInDrink(r);
-    }, 0);
-
-    const baseline = suggestedPrice(newTotal, target);
-    const adjusted = addVariance(baseline, variance);
-    const pc = pourCostPct(newTotal, menuPrice);
-    const gross = menuPrice - newTotal;
-
-    return { newTotal, baseline, adjusted, pc, gross };
-  }
-
-  const A = computeVariant(premium);
-  const B = computeVariant(value);
-
-  swapOut.innerHTML = `
-    <div class="rounded-xl border border-white/10 bg-white/5 p-3 text-sm">
-      <div class="font-extrabold">Premium bottle ($60)</div>
-      <div class="text-slate-300">New cocktail cost: <b>${money(A.newTotal)}</b></div>
-      <div class="text-slate-300">Pour cost: <b>${A.pc.toFixed(1)}%</b></div>
-      <div class="${A.gross >= 0 ? "text-emerald-300" : "text-rose-300"}">Gross: <b>${money(A.gross)}</b></div>
-    </div>
-    <div class="rounded-xl border border-white/10 bg-white/5 p-3 text-sm">
-      <div class="font-extrabold">Value bottle ($20)</div>
-      <div class="text-slate-300">New cocktail cost: <b>${money(B.newTotal)}</b></div>
-      <div class="text-slate-300">Pour cost: <b>${B.pc.toFixed(1)}%</b></div>
-      <div class="${B.gross >= 0 ? "text-emerald-300" : "text-rose-300"}">Gross: <b>${money(B.gross)}</b></div>
-    </div>
+  document.getElementById("swapResults").innerHTML = `
+    <div class="pill">Premium ($60): ${A.pour.toFixed(1)}% • ${money(A.gross)}</div>
+    <div class="pill">Value ($20): ${B.pour.toFixed(1)}% • ${money(B.gross)}</div>
   `;
 }
 
-// Buttons
-document.getElementById("cmAddIngredientBtn")?.addEventListener("click", () => cmAddIngredient());
-document.getElementById("cmCalcBtn")?.addEventListener("click", cmCalculate);
+// Seed example cocktail
+addIngredientRow({ name:"Tequila", bottleCost:60, bottleOz:25.4, recipeOz:1.5 });
+addIngredientRow({ name:"Lime Juice", bottleCost:5, bottleOz:16, recipeOz:0.75 });
+addIngredientRow({ name:"Simple Syrup", bottleCost:4, bottleOz:16, recipeOz:0.5 });
 
-// Seed cocktail example: tequila + lime + syrup + bitters
-cmAddIngredient({ name: "Tequila", bottleCost: 60, bottleOz: 25.4, recipeOz: 1.5 });
-cmAddIngredient({ name: "Lime Juice", bottleCost: 5, bottleOz: 16, recipeOz: 0.75 });  // demo bottle
-cmAddIngredient({ name: "Simple Syrup", bottleCost: 4, bottleOz: 16, recipeOz: 0.5 });
-cmAddIngredient({ name: "Bitters", bottleCost: 12, bottleOz: 5, recipeOz: 0.05 });
-cmRender();
-``
-    // Footer year
-    document.getElementById("year").textContent = new Date().getFullYear();
-  </script>
+document.getElementById("addIngredientBtn").addEventListener("click", () => addIngredientRow());
+  // ================================
+// PROMOTIONS PLANNER
+// ================================
+const promotions = [
+  "Happy Hour Feature (2–4pm)",
+  "Premium Cocktail Spotlight",
+  "Bundle: Cocktail + Appetizer",
+  "Seasonal Limited‑Time Cocktail",
+  "Staff Pick of the Week"
+];
+
+const promoPlan = [];
+
+function renderPromos() {
+  document.getElementById("promoList").innerHTML = promotions.map((p, i) => `
+    <li>
+      <button onclick="addPromo(${i})"
+        class="pill">
+        + ${p}
+      </button>
+    </li>
+  `).join("");
+
+  document.getElementById("promoPlan").innerHTML = promoPlan.length
+    ? promoPlan.map(p => `<li class="pill">${p}</li>`).join("")
+    : `<li class="sub">No promotions selected yet.</li>`;
+}
+
+function addPromo(idx) {
+  const p = promotions[idx];
+  if (!promoPlan.includes(p)) promoPlan.push(p);
+  renderPromos();
+}
+
+renderPromos();
+
+// ================================
+// FOOTER YEAR
+// ================================
+document.getElementById("year").textContent = new Date().getFullYear();
+</script>
+
 </body>
 </html>
