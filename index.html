@@ -1,196 +1,1112 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Customer Insights Hub (Demo)</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Customer Insights Hub (Demo)</title>
+  <meta name="description" content="Customer-facing insights hub demo. Dummy data only."/>
+  <style>
+    :root{
+      --bg:#f6f7f9;
+      --panel:#ffffff;
+      --panel2:#fbfbfc;
+      --border:#e5e7eb;
+      --text:#111827;
+      --muted:#6b7280;
 
-<style>
-:root{
-  --bg:#f5f6f8;
-  --panel:#ffffff;
-  --border:#e5e7eb;
-  --text:#111827;
-  --muted:#6b7280;
-  --accent:#c8102e;
-  --good:#16a34a;
-  --bad:#dc2626;
-}
-*{box-sizing:border-box}
-body{
-  margin:0;
-  font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-  background:linear-gradient(180deg,#fafafa,#f1f2f4);
-  color:var(--text);
-}
-header{
-  padding:16px 24px;
-  background:#fff;
-  border-bottom:1px solid var(--border);
-  font-weight:900;
-}
-.container{max-width:1100px;margin:auto;padding:24px}
-.card{
-  background:var(--panel);
-  border:1px solid var(--border);
-  border-radius:14px;
-  padding:16px;
-  margin-bottom:20px;
-}
-.title{font-size:20px;font-weight:900}
-.sub{font-size:13px;color:var(--muted);margin-top:4px}
-.row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
-.btn{
-  padding:8px 12px;
-  border-radius:10px;
-  border:1px solid var(--border);
-  background:#fff;
-  cursor:pointer;
-  font-weight:700;
-}
-.btn.primary{background:var(--accent);color:#fff;border:none}
-input{padding:6px;border:1px solid var(--border);border-radius:8px;width:100%}
-table{width:100%;border-collapse:collapse;font-size:13px}
-td,th{border-bottom:1px solid var(--border);padding:8px}
-.progress{height:10px;background:#e5e7eb;border-radius:999px;overflow:hidden}
-.progress span{display:block;height:100%;background:var(--accent)}
-</style>
+      --accent:#c8102e;
+      --accent2:#9e0b23;
+
+      --good:#16a34a;
+      --bad:#c8102e;
+      --warn:#f59e0b;
+
+      --shadow: 0 18px 40px rgba(0,0,0,.10);
+      --shadow2: 0 10px 24px rgba(0,0,0,.10);
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
+      background:
+        radial-gradient(1100px 360px at 10% -10%, rgba(200,16,46,.10), transparent),
+        radial-gradient(900px 260px at 90% 0%, rgba(200,16,46,.06), transparent),
+        linear-gradient(180deg,#fbfbfc,#f1f2f4);
+      color:var(--text);
+    }
+
+    header{
+      position:sticky;top:0;z-index:20;
+      display:flex;align-items:center;gap:18px;
+      padding:14px 22px;
+      border-bottom:1px solid var(--border);
+      background:rgba(255,255,255,.92);
+      backdrop-filter:blur(10px);
+    }
+
+    .brand{display:flex;align-items:center;gap:10px;font-weight:900}
+    .mark{
+      width:34px;height:34px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      display:grid;place-items:center;color:#fff;font-weight:900;
+      box-shadow:0 12px 20px rgba(200,16,46,.18);
+    }
+
+    nav a{
+      margin-right:14px;
+      color:var(--muted);
+      text-decoration:none;
+      font-weight:750;
+      font-size:12.5px;
+    }
+    nav a:hover{color:var(--accent)}
+    .right{margin-left:auto;display:flex;align-items:center;gap:10px}
+
+    .chip{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:8px 12px;border-radius:999px;
+      border:1px solid var(--border);background:#fff;
+      font-size:12px;color:var(--muted)
+    }
+    .chip b{color:var(--text)}
+
+    .btn{
+      padding:9px 12px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      cursor:pointer;
+      font-size:12px;
+      font-weight:800;
+      color:var(--text);
+      transition:.15s;
+    }
+    .btn:hover{box-shadow:var(--shadow2);transform:translateY(-1px)}
+    .btn.primary{
+      border:none;
+      color:#fff;
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      box-shadow:0 14px 22px rgba(200,16,46,.18);
+    }
+    .btn.ghost{background:var(--panel2)}
+    .btn.small{padding:7px 10px;border-radius:10px;font-size:12px}
+
+    .container{max-width:1200px;margin:0 auto;padding:22px}
+
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .card{
+      grid-column:span 12;
+      background:var(--panel);
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:18px;
+      box-shadow:0 0 0 rgba(0,0,0,0);
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .card:hover{transform:translateY(-2px);box-shadow:var(--shadow)}
+    @media(min-width:900px){
+      .span4{grid-column:span 4}
+      .span6{grid-column:span 6}
+      .span8{grid-column:span 8}
+    }
+
+    .title{font-size:22px;font-weight:900;letter-spacing:-.2px}
+    .sub{color:var(--muted);font-size:13px;margin-top:6px;line-height:1.35}
+    .mini{color:var(--muted);font-size:12px;margin-top:6px;line-height:1.35}
+    .tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:5px 10px;border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;font-size:12px;color:var(--muted)
+    }
+
+    .hero{
+      background:
+        radial-gradient(1200px 420px at -10% -30%, rgba(200,16,46,.14), transparent),
+        var(--panel);
+    }
+    .heroTitle{
+      font-size:34px;line-height:1.12;font-weight:950;letter-spacing:-.7px;
+    }
+    .heroTitle span{color:var(--accent)}
+    .rowActions{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+
+    .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px}
+    .kpi{
+      background:linear-gradient(180deg,#ffffff,#f9fafb);
+      border:1px solid var(--border);
+      border-radius:14px;
+      padding:14px;
+    }
+    .kpi .label{color:var(--muted);font-size:12px;font-weight:800}
+    .kpi .value{font-size:26px;font-weight:950;margin-top:6px;letter-spacing:-.6px}
+    .delta.good{color:var(--good);font-weight:950}
+    .delta.bad{color:var(--bad);font-weight:950}
+
+    .callout{
+      border-left:5px solid var(--accent);
+      background:linear-gradient(180deg,#fff,#fbfbfc);
+    }
+
+    .pill{
+      display:inline-block;
+      padding:7px 12px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      font-size:12px;
+      color:var(--muted);
+      background:#fff;
+      margin:6px 8px 0 0;
+      cursor:pointer;
+      user-select:none;
+      transition:.15s;
+    }
+    .pill:hover{box-shadow:var(--shadow2);transform:translateY(-1px)}
+    .pill.active{border-color:var(--accent);color:var(--accent);box-shadow:0 10px 20px rgba(200,16,46,.10)}
+
+    table{width:100%;border-collapse:collapse;font-size:13px;margin-top:10px}
+    th,td{border-bottom:1px solid var(--border);padding:10px;text-align:left;vertical-align:top}
+    th{color:var(--muted);font-weight:900;font-size:12px}
+
+    input,select{
+      width:100%;
+      padding:9px 10px;
+      border-radius:12px;
+      border:1px solid var(--border);
+      background:#fff;
+      font-size:12.5px;
+      font-weight:650;
+      color:var(--text);
+      outline:none;
+    }
+    input:focus,select:focus{border-color:rgba(200,16,46,.55);box-shadow:0 0 0 4px rgba(200,16,46,.08)}
+
+    .progress{height:10px;border-radius:999px;background:#eef0f3;border:1px solid var(--border);overflow:hidden}
+    .progress > span{display:block;height:100%;background:linear-gradient(90deg,var(--accent),var(--accent2));width:0%}
+
+    .toast{
+      position:fixed;bottom:24px;right:24px;
+      background:#111827;color:#fff;
+      padding:12px 14px;border-radius:14px;
+      box-shadow:0 14px 30px rgba(0,0,0,.25);
+      opacity:0;transform:translateY(10px);
+      transition:.25s;
+      max-width:360px;
+      font-size:13px;
+      z-index:50;
+    }
+    .toast.show{opacity:1;transform:none}
+
+    .twoCol{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:900px){.twoCol{grid-template-columns:1fr 1fr}}
+
+    .svgBox{
+      border:1px solid var(--border);
+      border-radius:14px;
+      background:var(--panel2);
+      padding:12px;
+    }
+
+    .footer{text-align:center;color:var(--muted);font-size:12px;margin:34px 0}
+
+    .hideInPresent{display:block;}
+    .present .hideInPresent{display:none !important;}
+    .present .card{box-shadow:none}
+    .present .heroTitle{font-size:40px}
+  </style>
 </head>
 
 <body>
 
-<header>Customer Insights Hub — Demo</header>
+<header>
+  <div class="brand">
+    <div class="mark">★</div>
+    Customer Insights Hub
+  </div>
+
+  <nav class="hideInPresent">
+    <a href="#overview">Overview</a>
+    <a href="#myBusiness">My Business</a>
+    <a href="#trendingNearby">Trending Nearby</a>
+    <a href="#socialBuzz">Social Buzz</a>
+    <a href="#menuCosting">Menu Costing</a>
+    <a href="#tools">Tools</a>
+    <a href="#merch">Merchandising</a>
+    <a href="#support">Support</a>
+  </nav>
+
+  <div class="right">
+    <div class="chip">Cart: <b id="cartCount">0</b></div>
+    <button class="btn" id="exportBtn">Export</button>
+    <button class="btn primary" id="presentBtn">Presentation Mode</button>
+  </div>
+</header>
 
 <main class="container">
 
-<!-- MENU / COCKTAIL CALCULATOR -->
-<section class="card">
-  <div class="title">Menu Bar / Cocktail Calculator</div>
-  <div class="sub">Build a cocktail and see cost, pour %, and margin.</div>
+  <!-- HERO -->
+  <section id="overview" class="grid">
+    <div class="card span8 hero">
+      <div class="heroTitle">
+        Grow smarter with<br/>
+        <span>actionable insights</span>
+      </div>
+      <div class="sub hideInPresent">Understand what’s changing, why it matters, and what to do next — built for fast decisions.</div>
 
-  <table>
-    <thead>
-      <tr><th>Ingredient</th><th>Bottle $</th><th>Bottle oz</th><th>Recipe oz</th></tr>
-    </thead>
-    <tbody id="cocktailBody"></tbody>
-  </table>
+      <div class="twoCol" style="margin-top:14px">
+        <div class="card" style="padding:14px;background:var(--panel2)">
+          <div style="font-weight:950">Quick Actions</div>
+          <div class="rowActions">
+            <button class="btn primary" id="qaReorder">Reorder Fast</button>
+            <button class="btn" id="qaDeals">Find Deals</button>
+            <button class="btn" id="qaMenu">Build a Cocktail</button>
+            <button class="btn" id="qaSupport">Message Support</button>
+          </div>
+          <div class="mini hideInPresent">Demo actions show confirmations & add demo items to cart.</div>
+        </div>
 
-  <button class="btn" onclick="addIngredient()">+ Add Ingredient</button>
-
-  <div class="row" style="margin-top:16px">
-    <div>
-      <label class="sub">Target Pour Cost %</label>
-      <input id="targetPour" type="number" value="20"/>
+        <div class="card" style="padding:14px;background:var(--panel2)">
+          <div style="font-weight:950">Filters (demo)</div>
+          <div style="display:grid;gap:10px;margin-top:10px">
+            <select id="filterRegion">
+              <option>All Regions</option>
+              <option>North Bay</option>
+              <option>East Bay</option>
+            </select>
+            <select id="filterChannel">
+              <option>On‑Premise</option>
+              <option>Off‑Premise</option>
+            </select>
+            <select id="filterWindow">
+              <option value="30">Last 30 days</option>
+              <option value="60">Last 60 days</option>
+              <option value="90">Last 90 days</option>
+            </select>
+          </div>
+        </div>
+      </div>
     </div>
-    <div>
-      <label class="sub">Menu Price ($)</label>
-      <input id="menuPrice" type="number" value="14"/>
+
+    <div class="card span4">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+        <div>
+          <div class="title">Snapshot</div>
+          <div class="sub hideInPresent">High‑level view of recent performance (demo).</div>
+        </div>
+        <span class="tag hideInPresent">Updated today</span>
+      </div>
+
+      <div class="kpis" style="margin-top:14px;grid-template-columns:1fr 1fr">
+        <div class="kpi">
+          <div class="label">Orders</div>
+          <div id="kpiOrders" class="value">—</div>
+          <div class="delta good">▲ 6%</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Spend</div>
+          <div id="kpiSpend" class="value">—</div>
+          <div class="delta good">▲ 4%</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Avg Basket</div>
+          <div id="kpiBasket" class="value">—</div>
+          <div class="delta bad">▼ 2%</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Trending</div>
+          <div id="kpiTrend" class="value" style="font-size:18px">—</div>
+          <div class="mini hideInPresent">Right now</div>
+        </div>
+      </div>
     </div>
-  </div>
+  </section>
 
-  <div id="cocktailResults" class="sub" style="margin-top:12px"></div>
-</section>
-
-<!-- POUR COST CALCULATOR -->
-<section class="card">
-  <div class="title">Pour Cost Calculator</div>
-  <div class="sub">Quick pricing math for a single bottle.</div>
-
-  <div class="row">
-    <div>
-      <label class="sub">Bottle Cost ($)</label>
-      <input id="pcBottleCost" value="60"/>
+  <!-- INSIGHT -->
+  <section class="card callout" style="margin-top:16px">
+    <div class="sub hideInPresent" style="margin-top:0">Insight</div>
+    <div style="font-size:16px;font-weight:950;margin-top:6px">
+      RTD cocktails are driving higher reorder frequency this period.
     </div>
-    <div>
-      <label class="sub">Bottle Size (oz)</label>
-      <input id="pcBottleOz" value="25.4"/>
-    </div>
-    <div>
-      <label class="sub">Pour Size (oz)</label>
-      <input id="pcPourOz" value="1.5"/>
-    </div>
-    <div>
-      <label class="sub">Target Pour %</label>
-      <input id="pcTarget" value="20"/>
-    </div>
-  </div>
+    <div class="sub hideInPresent">What to do: feature 1 RTD SKU + 1 signature cocktail to lift basket size.</div>
+  </section>
 
-  <button class="btn primary" onclick="calcPour()">Calculate</button>
-  <div id="pcOut" class="sub" style="margin-top:10px"></div>
-</section>
+  <!-- MY BUSINESS -->
+  <section id="myBusiness" class="card" style="margin-top:16px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap">
+      <div>
+        <div class="title">My Business</div>
+        <div class="sub hideInPresent">Granular trends for brands/SKUs (demo). Toggle 30/60/90.</div>
+      </div>
+      <div class="rowActions">
+        <button class="btn small" data-window="30">30</button>
+        <button class="btn small" data-window="60">60</button>
+        <button class="btn small" data-window="90">90</button>
+      </div>
+    </div>
 
-<!-- MERCHANDISING -->
-<section class="card">
-  <div class="title">Merchandising / Perfect Merch</div>
-  <div class="sub">Execution checklist with live score.</div>
+    <div class="twoCol" style="margin-top:12px">
+      <div class="card" style="padding:14px;background:var(--panel2)">
+        <div class="sub" style="margin-top:0;color:var(--good);font-weight:950">Trending Up ↑</div>
+        <table>
+          <thead><tr><th>Brand / SKU</th><th>Signal</th><th>Action</th></tr></thead>
+          <tbody id="bizUp"></tbody>
+        </table>
+      </div>
 
-  <div id="merchChecks"></div>
-  <div class="progress" style="margin-top:10px"><span id="merchBar"></span></div>
-  <div id="merchScore" class="sub"></div>
-</section>
+      <div class="card" style="padding:14px;background:var(--panel2)">
+        <div class="sub" style="margin-top:0;color:var(--bad);font-weight:950">Trending Down ↓</div>
+        <table>
+          <thead><tr><th>Brand / SKU</th><th>Signal</th><th>Next step</th></tr></thead>
+          <tbody id="bizDown"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRENDING NEARBY -->
+  <section id="trendingNearby" class="card" style="margin-top:16px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+      <div>
+        <div class="title">Trending Nearby</div>
+        <div class="sub hideInPresent">Tap a category to see top trending products in your area (demo).</div>
+      </div>
+      <span class="tag hideInPresent">Based on similar businesses</span>
+    </div>
+
+    <div id="categoryPills" style="margin-top:10px"></div>
+    <div id="trendPanel" style="margin-top:12px"></div>
+  </section>
+
+  <!-- SOCIAL BUZZ -->
+  <section id="socialBuzz" class="card" style="margin-top:16px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+      <div>
+        <div class="title">Social Buzz</div>
+        <div class="sub hideInPresent">Trends guests are responding to — with quick actions (demo).</div>
+      </div>
+      <span class="tag hideInPresent">Add to cart ready</span>
+    </div>
+
+    <div class="grid" style="margin-top:12px" id="buzzGrid"></div>
+  </section>
+
+  <!-- MENU COSTING / COCKTAIL BUILDER -->
+  <section id="menuCosting" class="card" style="margin-top:16px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+      <div>
+        <div class="title">Menu Bar / Cocktail Calculator</div>
+        <div class="sub hideInPresent">
+          Multi‑ingredient costing with optional manual cost entry, pour %, variance, and spirit swap (demo).
+        </div>
+      </div>
+      <span class="tag hideInPresent">Pricing tool</span>
+    </div>
+
+    <div class="grid" style="margin-top:12px">
+      <div class="card span8" style="padding:14px;background:var(--panel2)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap">
+          <div>
+            <div style="font-weight:950">Ingredients</div>
+            <div class="mini hideInPresent">Check “Manual” to type exact cost in drink for that ingredient.</div>
+          </div>
+          <div class="rowActions">
+            <button class="btn small" id="addIngBtn">+ Add</button>
+            <button class="btn small" id="resetIngBtn">Reset</button>
+            <button class="btn small primary" id="saveCocktailBtn">Save</button>
+          </div>
+        </div>
+
+        <table>
+          <thead>
+            <tr>
+              <th>Ingredient</th>
+              <th>Bottle $</th>
+              <th>Bottle oz</th>
+              <th>Recipe oz</th>
+              <th>Manual</th>
+              <th>Cost in Drink ($)</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="ingBody"></tbody>
+        </table>
+      </div>
+
+      <div class="card span4" style="padding:14px;background:var(--panel2)">
+        <div style="font-weight:950">Pricing</div>
+        <div class="mini hideInPresent">
+          Suggested price uses pour cost % with variance method. (Common approach: add variance to baseline price.) 
+        </div>
+
+        <div style="display:grid;gap:10px;margin-top:10px">
+          <label class="mini">Target Pour Cost %</label>
+          <input id="targetPour" type="number" value="20"/>
+
+          <label class="mini">Variance %</label>
+          <input id="variancePct" type="number" value="20"/>
+
+          <label class="mini">Menu Price ($) (optional override)</label>
+          <input id="menuPrice" type="number" value="14"/>
+
+          <div id="pricingOut" style="margin-top:6px"></div>
+          <div id="swapOut" style="margin-top:10px"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:12px;background:var(--panel2)">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+        <div>
+          <div style="font-weight:950">Saved Cocktails</div>
+          <div class="mini hideInPresent">Saved items appear here with cost + suggested price.</div>
+        </div>
+      </div>
+      <div id="savedCocktails" class="mini" style="margin-top:10px"></div>
+    </div>
+  </section>
+
+  <!-- TOOLS -->
+  <section id="tools" class="card" style="margin-top:16px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+      <div>
+        <div class="title">Tools</div>
+        <div class="sub hideInPresent">Fast calculators customers can use instantly (demo).</div>
+      </div>
+      <span class="tag hideInPresent">Quick math</span>
+    </div>
+
+    <div class="twoCol" style="margin-top:12px">
+      <div class="card" style="padding:14px;background:var(--panel2)">
+        <div style="font-weight:950">Pour Cost Calculator</div>
+        <div class="mini hideInPresent">
+          Cost/oz → cost/pour → suggested price. 
+        </div>
+
+        <div style="display:grid;gap:10px;margin-top:10px">
+          <label class="mini">Bottle Cost ($)</label>
+          <input id="pcBottleCost" type="number" value="60"/>
+
+          <label class="mini">Bottle Size (oz)</label>
+          <input id="pcBottleOz" type="number" value="25.4"/>
+
+          <label class="mini">Pour Size (oz)</label>
+          <input id="pcPourOz" type="number" value="1.5" step="0.1"/>
+
+          <label class="mini">Target Pour Cost %</label>
+          <input id="pcTarget" type="number" value="20"/>
+
+          <button class="btn primary" id="pcCalcBtn">Calculate</button>
+          <div id="pcOut" style="margin-top:6px"></div>
+        </div>
+      </div>
+
+      <div class="card" style="padding:14px;background:var(--panel2)">
+        <div style="font-weight:950">What this means</div>
+        <div class="mini hideInPresent" style="margin-top:10px">
+          • Cost per ounce = bottle cost ÷ ounces in bottle<br/>
+          • Cost per pour = cost per ounce × pour size<br/>
+          • Suggested price = cost per pour ÷ (target % / 100)
+        </div>
+        <div class="mini hideInPresent" style="margin-top:10px">
+          You can use this to compare a $60 bottle vs $20 bottle instantly.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MERCHANDISING -->
+  <section id="merch" class="card" style="margin-top:16px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+      <div>
+        <div class="title">Merchandising / Perfect Merch</div>
+        <div class="sub hideInPresent">Visual guidelines + planogram recommendations (demo).</div>
+      </div>
+      <span class="tag hideInPresent">Best practice</span>
+    </div>
+
+    <div class="twoCol" style="margin-top:12px">
+      <!-- Visual guidelines + planogram -->
+      <div class="card" style="padding:14px;background:var(--panel2)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-end;gap:10px;flex-wrap:wrap">
+          <div>
+            <div style="font-weight:950">Recommended Display Setup</div>
+            <div class="mini hideInPresent">Select a focus area to see a suggested planogram & bar display approach.</div>
+          </div>
+          <div class="rowActions">
+            <span class="pill active" data-merch="bar">Bar Display</span>
+            <span class="pill" data-merch="shelf">Shelf Planogram</span>
+            <span class="pill" data-merch="rtd">RTD Cold Box</span>
+          </div>
+        </div>
+
+        <div id="merchReco" style="margin-top:12px"></div>
+
+        <div class="svgBox" style="margin-top:12px">
+          <svg id="merchViz" viewBox="0 0 900 260" width="100%" height="260" aria-label="Merch visual planogram demo">
+            <rect x="10" y="10" width="880" height="240" rx="14" fill="#ffffff" stroke="#e5e7eb"/>
+            <text x="30" y="42" font-size="16" font-weight="900" fill="#111827">Visual Reference (Demo)</text>
+            <text x="30" y="68" font-size="12" fill="#6b7280">This is a simplified layout example to show “what good looks like”.</text>
+
+            <rect x="30" y="95" width="840" height="40" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+            <text x="40" y="120" font-size="12" font-weight="800" fill="#6b7280">TOP SHELF (Premium)</text>
+
+            <rect x="30" y="145" width="840" height="40" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+            <text x="40" y="170" font-size="12" font-weight="800" fill="#6b7280">EYE LEVEL (Core Drivers)</text>
+
+            <rect x="30" y="195" width="840" height="40" rx="10" fill="#f9fafb" stroke="#e5e7eb"/>
+            <text x="40" y="220" font-size="12" font-weight="800" fill="#6b7280">LOW SHELF / BACKUP</text>
+
+            <circle cx="740" cy="65" r="6" fill="#c8102e"/>
+            <text x="755" y="69" font-size="12" fill="#6b7280">Suggested focus zone</text>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Execution score -->
+      <div class="card" style="padding:14px;background:var(--panel2)">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px">
+          <div>
+            <div style="font-weight:950">Execution Score</div>
+            <div class="mini hideInPresent">Check items to update your Perfect Merch score.</div>
+          </div>
+          <div style="text-align:right">
+            <div class="mini hideInPresent">Score</div>
+            <div style="font-weight:950;font-size:18px" id="merchScore">0%</div>
+          </div>
+        </div>
+
+        <div class="progress" style="margin-top:10px"><span id="merchBar"></span></div>
+
+        <div id="merchChecks" style="margin-top:12px;display:grid;gap:10px"></div>
+
+        <div class="card" style="margin-top:12px;background:#fff;padding:12px">
+          <div style="font-weight:950">Coaching Tip</div>
+          <div class="mini" id="merchTips">Start checking items to see tips here.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SUPPORT -->
+  <section id="support" class="card" style="margin-top:16px">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap">
+      <div>
+        <div class="title">Your Support Team</div>
+        <div class="sub hideInPresent">Message your rep or support team (demo).</div>
+      </div>
+      <span class="tag hideInPresent">Connected</span>
+    </div>
+
+    <div class="twoCol" style="margin-top:12px">
+      <div class="card" style="padding:14px;background:var(--panel2)">
+        <div style="font-weight:950">Sales Consultant</div>
+        <div class="mini hideInPresent">Alex Morgan (Demo)</div>
+        <div class="rowActions">
+          <button class="btn primary" data-toast="Message sent to your Sales Consultant (demo).">Message Rep</button>
+          <button class="btn" data-toast="Call scheduled (demo).">Schedule Call</button>
+        </div>
+      </div>
+
+      <div class="card" style="padding:14px;background:var(--panel2)">
+        <div style="font-weight:950">Customer Support</div>
+        <div class="mini hideInPresent">Chat / Email (Demo)</div>
+        <div class="rowActions">
+          <button class="btn primary" data-toast="Support chat opened (demo).">Start Chat</button>
+          <button class="btn" data-toast="Support email drafted (demo).">Email Support</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      © <span id="year"></span> Customer Insights Hub • Demo experience only
+    </div>
+  </section>
 
 </main>
 
-<script>
-/* ---------- COCKTAIL CALC ---------- */
-let cocktail=[
-  {name:"Tequila",cost:60,oz:25.4,recipe:1.5},
-  {name:"Lime",cost:5,oz:16,recipe:.75},
-  {name:"Simple",cost:4,oz:16,recipe:.5}
-];
+<div id="toast" class="toast">Added to cart</div>
 
-function renderCocktail(){
-  cocktailBody.innerHTML=cocktail.map(c=>`
-    <tr>
-      <td>${c.name}</td>
-      <td>${c.cost}</td>
-      <td>${c.oz}</td>
-      <td>${c.recipe}</td>
-    </tr>
+<script>
+  // Helpers
+  const money = (n) => new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:2}).format(n);
+  const money0 = (n) => new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n);
+  const rand = (min,max) => Math.floor(Math.random()*(max-min+1))+min;
+
+  // Toast
+  const toastEl = document.getElementById("toast");
+  const showToast = (msg) => {
+    toastEl.textContent = msg;
+    toastEl.classList.add("show");
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(()=>toastEl.classList.remove("show"), 2200);
+  };
+
+  // Cart
+  const cart = [];
+  const setCartCount = () => document.getElementById("cartCount").textContent = cart.length;
+  const addToCart = (item) => { cart.push(item); setCartCount(); showToast(`${item} added to cart`); };
+
+  // KPIs (demo)
+  document.getElementById("kpiOrders").textContent = rand(320,980).toLocaleString();
+  document.getElementById("kpiSpend").textContent  = money0(rand(180000,720000));
+  document.getElementById("kpiBasket").textContent = money0(rand(400,900));
+  document.getElementById("kpiTrend").textContent  = ["Tequila ↑","RTDs ↑","Vodka ↓","Espresso Martini ↑"][rand(0,3)];
+
+  // Quick actions
+  document.getElementById("qaReorder").addEventListener("click", ()=>addToCart("Reorder Starter Cart (Demo)"));
+  document.getElementById("qaDeals").addEventListener("click", ()=>showToast("Deals opened (demo)."));
+  document.getElementById("qaMenu").addEventListener("click", ()=>location.hash="#menuCosting");
+  document.getElementById("qaSupport").addEventListener("click", ()=>location.hash="#support");
+
+  // Export
+  document.getElementById("exportBtn").addEventListener("click", ()=>{
+    const payload = {
+      cart,
+      savedCocktails,
+      generatedAt: new Date().toISOString(),
+      note: "Demo export"
+    };
+    const blob = new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url; a.download = "customer-insights-export.json"; a.click();
+    URL.revokeObjectURL(url);
+    showToast("Exported demo JSON");
+  });
+
+  // Presentation mode
+  let presentMode = false;
+  document.getElementById("presentBtn").addEventListener("click", ()=>{
+    presentMode = !presentMode;
+    document.body.classList.toggle("present", presentMode);
+    showToast(presentMode ? "Presentation Mode ON" : "Presentation Mode OFF");
+  });
+
+  // Rep/support buttons
+  document.querySelectorAll("[data-toast]").forEach(btn=>{
+    btn.addEventListener("click", ()=>showToast(btn.dataset.toast));
+  });
+
+  // My Business data
+  const bizData = {
+    30: {
+      up: [
+        {name:"Brand A Tequila Blanco 750ml", why:"↑ Faster reorders", add:"Brand A Tequila Blanco 750ml"},
+        {name:"Brand B RTD 4‑Pack",          why:"↑ New placements", add:"Brand B RTD 4‑Pack"},
+        {name:"Brand D Margarita Can",      why:"↑ Weekend lift",   add:"Brand D Margarita Can"}
+      ],
+      down: [
+        {name:"Brand C Vodka 750ml",        why:"↓ Slowing velocity"},
+        {name:"Brand E Whiskey 750ml",      why:"↓ Fewer reorders"}
+      ]
+    },
+    60: {
+      up: [
+        {name:"Brand A Tequila Blanco 750ml", why:"↑ Sustained growth", add:"Brand A Tequila Blanco 750ml"},
+        {name:"Brand F RTD Variety Pack",     why:"↑ Basket builder",   add:"Brand F RTD Variety Pack"}
+      ],
+      down: [
+        {name:"Brand C Vodka 750ml",          why:"↓ Trade-down risk"},
+        {name:"Brand G Rum 750ml",            why:"↓ Less visibility"}
+      ]
+    },
+    90: {
+      up: [
+        {name:"Brand B RTD 4‑Pack",           why:"↑ Repeat buyers",     add:"Brand B RTD 4‑Pack"},
+        {name:"Brand H Espresso Liqueur",     why:"↑ Cocktail trend lift",add:"Brand H Espresso Liqueur"}
+      ],
+      down: [
+        {name:"Brand E Whiskey 750ml",        why:"↓ Seasonal dip"},
+        {name:"Brand I Gin 750ml",            why:"↓ Fewer reorders"}
+      ]
+    }
+  };
+
+  function renderBiz(windowDays){
+    const up = bizData[windowDays].up;
+    const down = bizData[windowDays].down;
+
+    document.getElementById("bizUp").innerHTML = up.map(x=>`
+      <tr>
+        <td><b>${x.name}</b><div class="mini">${x.why}</div></td>
+        <td class="delta good">▲ Up</td>
+        <td><button class="btn primary small" onclick="addToCart('${x.add.replace(/'/g,"\\'")}')">Add</button></td>
+      </tr>
+    `).join("");
+
+    document.getElementById("bizDown").innerHTML = down.map(x=>`
+      <tr>
+        <td><b>${x.name}</b><div class="mini">${x.why}</div></td>
+        <td class="delta bad">▼ Down</td>
+        <td><button class="btn small" onclick="showToast('Tip: review placement, feature, or substitute (demo).')">Tips</button></td>
+      </tr>
+    `).join("");
+  }
+  renderBiz(30);
+
+  document.querySelectorAll("#myBusiness [data-window]").forEach(btn=>{
+    btn.addEventListener("click", ()=>renderBiz(btn.dataset.window));
+  });
+
+  // Trending Nearby drilldown
+  const trendData = {
+    Tequila: [
+      {name:"Brand A Blanco 750ml", note:"↑ high reorder velocity"},
+      {name:"Brand J Reposado 750ml", note:"↑ new menu placements"},
+      {name:"Brand K Tequila RTD", note:"↑ strong trial"}
+    ],
+    RTDs: [
+      {name:"Brand B RTD 4‑Pack", note:"↑ basket builder"},
+      {name:"Brand F Variety Pack", note:"↑ repeat buyers"},
+      {name:"Brand D Margarita Can", note:"↑ weekend lift"}
+    ],
+    Vodka: [
+      {name:"Brand B Vodka 1L", note:"↑ cocktail base"},
+      {name:"Brand C Vodka 750ml", note:"↓ slowing velocity"},
+      {name:"Brand L Premium Vodka", note:"↑ trade-up"}
+    ],
+    Whiskey: [
+      {name:"Brand E Whiskey 750ml", note:"↓ seasonal dip"},
+      {name:"Brand M Bourbon 750ml", note:"↑ feature lift"}
+    ]
+  };
+
+  const pillsEl = document.getElementById("categoryPills");
+  const panelEl = document.getElementById("trendPanel");
+  const categories = Object.keys(trendData);
+
+  pillsEl.innerHTML = categories.map((c,i)=>`<span class="pill ${i===0?'active':''}" data-cat="${c}">${c}</span>`).join("");
+
+  function renderTrend(cat){
+    panelEl.innerHTML = `
+      <div class="card" style="padding:14px;background:var(--panel2)">
+        <div style="font-weight:950">${cat} – Trending in Your Area</div>
+        <div class="mini hideInPresent">Tap “Add” to build a demo order.</div>
+        <div style="display:grid;gap:10px;margin-top:10px">
+          ${trendData[cat].map(p=>`
+            <div class="card" style="padding:14px">
+              <div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap">
+                <div>
+                  <b>${p.name}</b>
+                  <div class="mini">${p.note}</div>
+                </div>
+                <div class="rowActions">
+                  <button class="btn primary small" onclick="addToCart('${p.name.replace(/'/g,"\\'")}')">Add</button>
+                  <button class="btn small" onclick="showToast('Details opened (demo).')">Details</button>
+                </div>
+              </div>
+            </div>
+          `).join("")}
+        </div>
+      </div>
+    `;
+  }
+  renderTrend(categories[0]);
+
+  pillsEl.addEventListener("click", (e)=>{
+    const pill = e.target.closest(".pill");
+    if(!pill) return;
+    pillsEl.querySelectorAll(".pill").forEach(p=>p.classList.remove("active"));
+    pill.classList.add("active");
+    renderTrend(pill.dataset.cat);
+  });
+
+  // Social Buzz cards
+  const buzzItems = [
+    {trend:"Spicy Margarita Riffs", product:"Brand A Tequila Blanco 750ml", reason:"Menu adoption rising"},
+    {trend:"Espresso Martini Variations", product:"Brand B Vodka 1L", reason:"Trending on cocktail menus"},
+    {trend:"RTD Flight Boards", product:"Brand B RTD 4‑Pack", reason:"Weekend demand"},
+    {trend:"Low‑ABV Spritz", product:"Brand N Aperitif 750ml", reason:"Guests requesting lighter options"}
+  ];
+  const buzzGrid = document.getElementById("buzzGrid");
+  buzzGrid.innerHTML = buzzItems.map(x=>`
+    <div class="card span6">
+      <div style="font-weight:950">${x.trend}</div>
+      <div class="mini hideInPresent">${x.reason}</div>
+      <div style="margin-top:10px;display:flex;justify-content:space-between;gap:10px;align-items:center;flex-wrap:wrap">
+        <div>
+          <span class="tag hideInPresent">Suggested item</span>
+          <div style="margin-top:6px"><b>${x.product}</b></div>
+        </div>
+        <div class="rowActions">
+          <button class="btn primary small" onclick="addToCart('${x.product.replace(/'/g,"\\'")}')">Add</button>
+          <button class="btn small" onclick="showToast('Recipe view (demo).')">View Recipe</button>
+        </div>
+      </div>
+    </div>
   `).join("");
 
-  const total= cocktail.reduce((s,c)=>s+(c.cost/c.oz*c.recipe),0);
-  const price=+menuPrice.value;
-  const pour=(total/price*100).toFixed(1);
-  cocktailResults.innerHTML=
-    `Drink Cost: $${total.toFixed(2)} • Pour Cost: ${pour}% • Gross: $${(price-total).toFixed(2)}`;
-}
-function addIngredient(){
-  cocktail.push({name:"New",cost:10,oz:16,recipe:.5});
-  renderCocktail();
-}
-menuPrice.oninput=renderCocktail;
-renderCocktail();
+  // Menu Costing / Cocktail Calculator with manual cost
+  const cocktail = {
+    rows: [
+      {name:"Base Spirit (Tequila)", bottleCost:60, bottleOz:25.4, recipeOz:1.5, manual:false, manualCost:0},
+      {name:"Lime Juice", bottleCost:5, bottleOz:16, recipeOz:0.75, manual:false, manualCost:0},
+      {name:"Simple Syrup", bottleCost:4, bottleOz:16, recipeOz:0.5, manual:false, manualCost:0},
+      {name:"Bitters", bottleCost:12, bottleOz:5, recipeOz:0.05, manual:true, manualCost:0.15}
+    ]
+  };
+  const savedCocktails = [];
 
-/* ---------- POUR COST ---------- */
-function calcPour(){
-  const cost=pcBottleCost.value/pcBottleOz.value*pcPourOz.value;
-  const suggested=(cost/(pcTarget.value/100));
-  pcOut.innerHTML=
-    `Cost per pour: $${cost.toFixed(2)} • Suggested price: $${suggested.toFixed(2)}`;
-}
+  const ingBody = document.getElementById("ingBody");
 
-/* ---------- MERCH ---------- */
-const merchItems=[
-  "Pricing visible",
-  "Facings straight",
-  "Signage clean",
-  "Display themed",
-  "Out of stocks addressed"
-];
-merchChecks.innerHTML=merchItems.map((m,i)=>`
-  <label>
-    <input type="checkbox" onchange="updateMerch()"/> ${m}
-  </label><br/>
-`).join("");
+  function costPerOz(bc, oz){ return bc / Math.max(0.01, oz); }
+  function lineCost(row){
+    if(row.manual) return Number(row.manualCost || 0);
+    return costPerOz(Number(row.bottleCost), Number(row.bottleOz)) * Number(row.recipeOz);
+  }
+  function suggestedPrice(totalCost, targetPct){
+    return totalCost / Math.max(0.01, (targetPct/100));
+  }
+  function applyVariance(price, variancePct){
+    return price + (price * (variancePct/100));
+  }
+  function pourCostPct(totalCost, salePrice){
+    return (totalCost / Math.max(0.01, salePrice)) * 100;
+  }
 
-function updateMerch(){
-  const total=merchItems.length;
-  const checked=[...merchChecks.querySelectorAll("input")].filter(x=>x.checked).length;
-  const pct=Math.round(checked/total*100);
-  merchBar.style.width=pct+"%";
-  merchScore.innerHTML=`Perfect Merch Score: ${pct}%`;
-}
+  function renderIngredients(){
+    ingBody.innerHTML = cocktail.rows.map((r, idx)=>`
+      <tr>
+        <td><input value="${r.name}" data-i="${idx}" data-k="name"/></td>
+        <td><input type="number" value="${r.bottleCost}" data-i="${idx}" data-k="bottleCost"/></td>
+        <td><input type="number" step="0.1" value="${r.bottleOz}" data-i="${idx}" data-k="bottleOz"/></td>
+        <td><input type="number" step="0.1" value="${r.recipeOz}" data-i="${idx}" data-k="recipeOz"/></td>
+        <td style="text-align:center">
+          <input type="checkbox" data-i="${idx}" data-k="manual" ${r.manual ? "checked" : ""}/>
+        </td>
+        <td>
+          <input type="number" step="0.01" value="${r.manualCost || ""}"
+            data-i="${idx}" data-k="manualCost" ${r.manual ? "" : "disabled"}/>
+        </td>
+        <td><button class="btn small" data-del="${idx}">Remove</button></td>
+      </tr>
+    `).join("");
+
+    ingBody.querySelectorAll("input").forEach(inp=>{
+      inp.addEventListener("input", ()=>{
+        const i = Number(inp.dataset.i);
+        const k = inp.dataset.k;
+        if(inp.type === "checkbox") cocktail.rows[i][k] = inp.checked;
+        else if(inp.type === "number") cocktail.rows[i][k] = Number(inp.value || 0);
+        else cocktail.rows[i][k] = inp.value;
+        renderIngredients();
+        computePricing();
+      });
+    });
+
+    ingBody.querySelectorAll("button[data-del]").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        cocktail.rows.splice(Number(btn.dataset.del), 1);
+        renderIngredients();
+        computePricing();
+      });
+    });
+  }
+
+  function computePricing(){
+    const totalCost = cocktail.rows.reduce((s,r)=>s+lineCost(r),0);
+
+    const target = Number(document.getElementById("targetPour").value||20);
+    const variance = Number(document.getElementById("variancePct").value||20);
+    const overridePrice = Number(document.getElementById("menuPrice").value||0);
+
+    const baseline = suggestedPrice(totalCost, target);
+    const adjusted = applyVariance(baseline, variance);
+    const usePrice = overridePrice > 0 ? overridePrice : adjusted;
+
+    const pc = pourCostPct(totalCost, usePrice);
+    const gross = usePrice - totalCost;
+
+    document.getElementById("pricingOut").innerHTML = `
+      <div class="tag">Total Cost: <b>${money(totalCost)}</b></div>
+      <div class="tag">Suggested (Target ${target}%): <b>${money(baseline)}</b></div>
+      <div class="tag">w/ Variance (${variance}%): <b>${money(adjusted)}</b></div>
+      <div class="tag">Using Price: <b>${money(usePrice)}</b></div>
+      <div class="tag">Pour Cost: <b>${pc.toFixed(1)}%</b></div>
+      <div class="tag">Gross/Drink: <b>${money(gross)}</b></div>
+    `;
+
+    // Base spirit swap comparison (row 0)
+    if(cocktail.rows.length){
+      const base = cocktail.rows[0];
+      const baseCostCurrent = lineCost(base);
+
+      function swapCost(newBottleCost){
+        const swapped = {...base, bottleCost:newBottleCost, manual:false, manualCost:0};
+        const swappedCost = lineCost(swapped);
+        const newTotal = totalCost - baseCostCurrent + swappedCost;
+        const newPc = pourCostPct(newTotal, usePrice);
+        const newGross = usePrice - newTotal;
+        return {newTotal, newPc, newGross};
+      }
+
+      const prem = swapCost(60);
+      const val  = swapCost(20);
+
+      document.getElementById("swapOut").innerHTML = `
+        <div class="mini hideInPresent"><b>Spirit Swap Comparison (Base Spirit)</b></div>
+        <div class="twoCol" style="margin-top:8px">
+          <div class="card" style="padding:12px;background:#fff">
+            <b>Premium ($60 bottle)</b>
+            <div class="mini">New Cost: ${money(prem.newTotal)} • Pour: ${prem.newPc.toFixed(1)}% • Gross: ${money(prem.newGross)}</div>
+          </div>
+          <div class="card" style="padding:12px;background:#fff">
+            <b>Value ($20 bottle)</b>
+            <div class="mini">New Cost: ${money(val.newTotal)} • Pour: ${val.newPc.toFixed(1)}% • Gross: ${money(val.newGross)}</div>
+          </div>
+        </div>
+      `;
+    }
+  }
+
+  document.getElementById("addIngBtn").addEventListener("click", ()=>{
+    cocktail.rows.push({name:"New Ingredient", bottleCost:10, bottleOz:16, recipeOz:0.5, manual:false, manualCost:0});
+    renderIngredients();
+    computePricing();
+  });
+
+  document.getElementById("resetIngBtn").addEventListener("click", ()=>{
+    cocktail.rows = [
+      {name:"Base Spirit (Tequila)", bottleCost:60, bottleOz:25.4, recipeOz:1.5, manual:false, manualCost:0},
+      {name:"Lime Juice", bottleCost:5, bottleOz:16, recipeOz:0.75, manual:false, manualCost:0},
+      {name:"Simple Syrup", bottleCost:4, bottleOz:16, recipeOz:0.5, manual:false, manualCost:0},
+      {name:"Bitters", bottleCost:12, bottleOz:5, recipeOz:0.05, manual:true, manualCost:0.15}
+    ];
+    renderIngredients();
+    computePricing();
+    showToast("Cocktail reset (demo).");
+  });
+
+  document.getElementById("saveCocktailBtn").addEventListener("click", ()=>{
+    const totalCost = cocktail.rows.reduce((s,r)=>s+lineCost(r),0);
+    const target = Number(document.getElementById("targetPour").value||20);
+    const variance = Number(document.getElementById("variancePct").value||20);
+    const baseline = suggestedPrice(totalCost, target);
+    const adjusted = applyVariance(baseline, variance);
+
+    savedCocktails.unshift({name:`Cocktail ${savedCocktails.length+1}`, cost: totalCost, suggested: adjusted});
+
+    document.getElementById("savedCocktails").innerHTML = savedCocktails.map(c=>
+      `<div class="tag">${c.name}: cost <b>${money(c.cost)}</b> • suggested <b>${money(c.suggested)}</b></div>`
+    ).join(" ");
+
+    showToast("Cocktail saved (demo).");
+  });
+
+  document.getElementById("targetPour").addEventListener("input", computePricing);
+  document.getElementById("variancePct").addEventListener("input", computePricing);
+  document.getElementById("menuPrice").addEventListener("input", computePricing);
+
+  renderIngredients();
+  computePricing();
+
+  // Pour cost calculator
+  document.getElementById("pcCalcBtn").addEventListener("click", ()=>{
+    const bottleCost = Number(document.getElementById("pcBottleCost").value||0);
+    const bottleOz = Number(document.getElementById("pcBottleOz").value||25.4);
+    const pourOz = Number(document.getElementById("pcPourOz").value||1.5);
+    const target = Number(document.getElementById("pcTarget").value||20);
+
+    const cpo = bottleCost/Math.max(0.01,bottleOz);
+    const cpp = cpo*pourOz;
+    const suggested = cpp/Math.max(0.01,(target/100));
+
+    document.getElementById("pcOut").innerHTML = `
+      <div class="tag">Cost/oz: <b>${money(cpo)}</b></div>
+      <div class="tag">Cost/pour: <b>${money(cpp)}</b></div>
+      <div class="tag">Suggested price: <b>${money(suggested)}</b></div>
+    `;
+    showToast("Pour cost calculated (demo).");
+  });
+
+  // Merch recommendations (data-driven demo)
+  const merchRecommendations = {
+    bar: {
+      title:"Bar Display – Best Practice",
+      bullets:[
+        "Place premium at eye level behind the bar",
+        "Group by category (Tequila together, Vodka together)",
+        "Keep 2–3 hero brands per shelf for clarity"
+      ]
+    },
+    shelf: {
+      title:"Shelf Planogram – Best Practice",
+      bullets:[
+        "Block by category, then price tier (Good/Better/Best)",
+        "Use 3–4 facings for top movers",
+        "Keep signage clean + price labels aligned"
+      ]
+    },
+    rtd: {
+      title:"RTD Cold Box – Best Practice",
+      bullets:[
+        "Group RTDs together (margarita/vodka soda)",
+        "Keep cold placement and full packs faced forward",
+        "Rotate slow movers out to keep set productive"
+      ]
+    }
+  };
+
+  function setMerchMode(mode){
+    document.querySelectorAll("[data-merch]").forEach(p=>p.classList.remove("active"));
+    document.querySelector(`[data-merch="${mode}"]`)?.classList.add("active");
+    const r = merchRecommendations[mode];
+    document.getElementById("merchReco").innerHTML = `
+      <div style="font-weight:950">${r.title}</div>
+      <div class="mini hideInPresent" style="margin-top:8px">
+        ${r.bullets.map(b=>`• ${b}`).join("<br/>")}
+      </div>
+    `;
+  }
+  setMerchMode("bar");
+
+  document.querySelectorAll("[data-merch]").forEach(p=>{
+    p.addEventListener("click", ()=>setMerchMode(p.dataset.merch));
+  });
+
+  // Merch execution checklist + score
+  const merchChecklist = [
+    {t:"Pricing visible + correct tags", tip:"Clear pricing increases trust and conversion."},
+    {t:"Facings straight + pulled forward", tip:"Fronting boosts perceived availability."},
+    {t:"Display has one clear theme", tip:"Clutter reduces selection—keep it focused."},
+    {t:"Signage clean + readable", tip:"Replace damaged materials immediately."},
+    {t:"Secondary display maintained", tip:"Maintain 2+ weeks for best impact."}
+  ];
+
+  const checksEl = document.getElementById("merchChecks");
+  checksEl.innerHTML = merchChecklist.map((c,i)=>`
+    <label class="btn ghost" style="display:flex;gap:10px;align-items:center;justify-content:space-between">
+      <span>${c.t}</span>
+      <input type="checkbox" data-i="${i}"/>
+    </label>
+  `).join("");
+
+  function updateMerchScore(){
+    const boxes = checksEl.querySelectorAll("input[type=checkbox]");
+    const total = boxes.length;
+    const on = [...boxes].filter(b=>b.checked).length;
+    const pct = Math.round((on/Math.max(1,total))*100);
+
+    document.getElementById("merchScore").textContent = `${pct}%`;
+    document.getElementById("merchBar").style.width = `${pct}%`;
+
+    if(on === 0){
+      document.getElementById("merchTips").textContent = "Start checking items to see tips here.";
+      return;
+    }
+    const firstChecked = [...boxes].find(b=>b.checked);
+    const tip = merchChecklist[Number(firstChecked.dataset.i)].tip;
+    document.getElementById("merchTips").innerHTML = `Tip: <b>${tip}</b>`;
+  }
+  checksEl.addEventListener("change", updateMerchScore);
+  updateMerchScore();
+
+  // Footer year
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // Start cart count
+  setCartCount();
 </script>
 
 </body>
