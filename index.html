@@ -6,15 +6,15 @@
   <title>Customer Insights Hub (Demo)</title>
   <meta name="description" content="Customer-facing insights hub demo. Dummy data only." />
 
-  <!-- Tailwind via CDN (fast, flashy, no local CSS paths to break) -->
+  <!-- Tailwind via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Chart.js via CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <style>
-    /* tiny polish that complements Tailwind */
-    .glass { backdrop-filter: blur(10px); background: rgba(255,255,255,.06); }
+    .glass{backdrop-filter: blur(10px); background: rgba(255,255,255,.06);}
+    html { scroll-behavior: smooth; }
   </style>
 </head>
 
@@ -30,9 +30,7 @@
   <header class="sticky top-0 z-20 border-b border-white/10 bg-slate-950/70 glass">
     <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3">
       <div class="flex items-center gap-3">
-        <div class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-violet-500 to-emerald-400 font-black">
-          ✦
-        </div>
+        <div class="grid h-10 w-10 place-items-center rounded-xl bg-gradient-to-br from-violet-500 to-emerald-400 font-black">✦</div>
         <div>
           <div class="text-sm font-extrabold tracking-wide">Customer Insights Hub</div>
           <div class="text-xs text-slate-300">Demo experience • dummy data only</div>
@@ -40,39 +38,41 @@
       </div>
 
       <nav class="hidden gap-4 text-sm text-slate-300 md:flex">
-        <a class="hover:text-white" href="#overview">Overview</a>
-        <a class="hover:text-white" href="#insights">Insights</a>
-        <a class="hover:text-white" href="#trends">Trends</a>
-        <a class="hover:text-white" href="#help">Support</a>
+        <a href="#overview" class="hover:text-white">Overview</a>
+        <a href="#myBusiness" class="hover:text-white">My Business</a>
+        <a href="#nearbyTrends" class="hover:text-white">Trending Nearby</a>
+        <a href="#socialBuzz" class="hover:text-white">Social Buzz</a>
+        <a href="#menuBuilder" class="hover:text-white">Menu Builder</a>
+        <a href="#perfectDisplay" class="hover:text-white">Perfect Display</a>
+        <a href="#tools" class="hover:text-white">Tools</a>
+        <a href="#promotions" class="hover:text-white">Promotions</a>
+        <a href="#rep" class="hover:text-white">Rep Connection</a>
+        <a href="#support" class="hover:text-white">Support</a>
       </nav>
 
       <div class="flex items-center gap-2">
-        <button id="themeBtn"
-          class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
-          Toggle theme
-        </button>
-        <button id="exportBtn"
-          class="rounded-xl bg-gradient-to-r from-violet-500 to-emerald-400 px-3 py-2 text-sm font-bold text-slate-950 hover:brightness-110 transition">
-          Export
-        </button>
+        <button id="themeBtn" class="rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">Toggle theme</button>
+        <button id="exportBtn" class="rounded-xl bg-gradient-to-r from-violet-500 to-emerald-400 px-3 py-2 text-sm font-bold text-slate-950 hover:brightness-110 transition">Export</button>
       </div>
     </div>
   </header>
 
-  <!-- Hero -->
+  <!-- Hero + Filters + Quick actions -->
   <section class="mx-auto max-w-6xl px-4 pt-10">
-    <div class="rounded-3xl border border-white/10 bg-white/5 p-6 glass">
+    <div id="overview" class="rounded-3xl border border-white/10 bg-white/5 p-6 glass">
       <div class="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
         <div>
           <h1 class="text-3xl font-black leading-tight md:text-4xl">
-            Grow smarter with <span class="bg-gradient-to-r from-violet-400 to-emerald-300 bg-clip-text text-transparent">actionable insights</span>.
+            Grow smarter with
+            <span class="bg-gradient-to-r from-violet-400 to-emerald-300 bg-clip-text text-transparent">
+              actionable insights
+            </span>.
           </h1>
           <p class="mt-2 max-w-2xl text-slate-300">
-            A customer-facing hub concept that surfaces trends, recommendations, and helpful tools—all in a few clicks.
+            A customer-facing hub concept that surfaces trends, recommendations, promotions, and tools—all in a few clicks.
           </p>
         </div>
 
-        <!-- Filters -->
         <div class="grid w-full gap-3 md:w-auto md:grid-cols-3">
           <select id="geo" class="rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm">
             <option>All Regions</option>
@@ -89,16 +89,16 @@
             <option>Last 30 days</option>
             <option>Last 7 days</option>
             <option>Quarter to date</option>
+            <option>Year to date</option>
           </select>
         </div>
       </div>
 
-      <!-- Quick Actions -->
-      <div id="overview" class="mt-6 grid gap-4 md:grid-cols-4">
+      <div class="mt-6 grid gap-4 md:grid-cols-4">
         <button class="group rounded-2xl border border-white/10 bg-slate-900/30 p-4 text-left hover:bg-white/10 transition">
           <div class="text-xs text-slate-300">Quick Action</div>
           <div class="mt-1 text-lg font-extrabold">Reorder Fast</div>
-          <div class="mt-2 text-sm text-slate-300">One-click “top movers” starter cart.</div>
+          <div class="mt-2 text-sm text-slate-300">One-click starter cart from top movers.</div>
           <div class="mt-3 text-xs text-slate-400 group-hover:text-slate-200">Open →</div>
         </button>
 
@@ -112,7 +112,7 @@
         <button class="group rounded-2xl border border-white/10 bg-slate-900/30 p-4 text-left hover:bg-white/10 transition">
           <div class="text-xs text-slate-300">Quick Action</div>
           <div class="mt-1 text-lg font-extrabold">Track Orders</div>
-          <div class="mt-2 text-sm text-slate-300">Delivery status + open orders view.</div>
+          <div class="mt-2 text-sm text-slate-300">Delivery status + open orders.</div>
           <div class="mt-3 text-xs text-slate-400 group-hover:text-slate-200">Open →</div>
         </button>
 
@@ -126,32 +126,35 @@
     </div>
   </section>
 
-  <!-- KPIs + Charts -->
+  <!-- KPI row -->
   <section class="mx-auto max-w-6xl px-4 py-8">
     <div class="grid gap-4 md:grid-cols-4">
       <div class="rounded-2xl border border-white/10 bg-white/5 p-4 glass">
         <div class="text-xs text-slate-300">Estimated Orders</div>
         <div id="kpiOrders" class="mt-1 text-3xl font-black">—</div>
-        <div id="kpiOrdersDelta" class="mt-2 text-xs text-emerald-300">—</div>
+        <div id="kpiOrdersDelta" class="mt-2 text-xs">—</div>
       </div>
+
       <div class="rounded-2xl border border-white/10 bg-white/5 p-4 glass">
         <div class="text-xs text-slate-300">Estimated Spend</div>
         <div id="kpiSpend" class="mt-1 text-3xl font-black">—</div>
-        <div id="kpiSpendDelta" class="mt-2 text-xs text-emerald-300">—</div>
+        <div id="kpiSpendDelta" class="mt-2 text-xs">—</div>
       </div>
+
       <div class="rounded-2xl border border-white/10 bg-white/5 p-4 glass">
         <div class="text-xs text-slate-300">Avg Basket Size</div>
         <div id="kpiBasket" class="mt-1 text-3xl font-black">—</div>
-        <div id="kpiBasketDelta" class="mt-2 text-xs text-emerald-300">—</div>
+        <div id="kpiBasketDelta" class="mt-2 text-xs">—</div>
       </div>
+
       <div class="rounded-2xl border border-white/10 bg-white/5 p-4 glass">
         <div class="text-xs text-slate-300">Trending Right Now</div>
-        <div class="mt-1 text-xl font-extrabold">Premium Picks ↑</div>
+        <div id="kpiTrend" class="mt-1 text-xl font-extrabold">—</div>
         <div class="mt-2 text-xs text-slate-300">Updated today</div>
       </div>
     </div>
 
-    <div id="trends" class="mt-4 grid gap-4 md:grid-cols-2">
+    <div class="mt-4 grid gap-4 md:grid-cols-2">
       <div class="rounded-3xl border border-white/10 bg-white/5 p-5 glass">
         <div class="flex items-center justify-between">
           <h2 class="text-lg font-extrabold">Spend Trend</h2>
@@ -171,76 +174,342 @@
           <canvas id="catChart" height="140"></canvas>
         </div>
       </div>
-    </div>
+    </div><!-- My Business -->
+    <section id="myBusiness" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
+      <div class="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
+        <div>
+          <h2 class="text-xl font-black">My Business</h2>
+          <p class="mt-1 text-sm text-slate-300">
+            Top items, spend, and reorder signals (demo).
+          </p>
+        </div>
+        <div class="flex gap-2">
+          <button class="rangeBtn rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition" data-days="30">30 days</button>
+          <button class="rangeBtn rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition" data-days="60">60 days</button>
+          <button class="rangeBtn rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition" data-days="90">90 days</button>
+        </div>
+      </div>
 
-    <!-- Featured Insights -->
-    <div id="insights" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="text-xs text-slate-300">Total Spend (YTD)</div>
+          <div id="ytdSpend" class="mt-1 text-3xl font-black">—</div>
+          <div class="mt-2 text-xs text-slate-400">Demo value</div>
+        </div>
+
+        <div class="md:col-span-2 rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="flex items-center justify-between">
+            <div class="font-extrabold">Top 10 Items</div>
+            <div id="rangeLabel" class="text-xs text-slate-300">Last 30 days</div>
+          </div>
+
+          <div class="mt-3 overflow-auto">
+            <table class="w-full text-sm">
+              <thead class="text-slate-300">
+                <tr class="border-b border-white/10">
+                  <th class="py-2 text-left">Item</th>
+                  <th class="py-2 text-right">Units</th>
+                  <th class="py-2 text-right">Spend</th>
+                </tr>
+              </thead>
+              <tbody id="topItemsTbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trending Nearby -->
+    <section id="nearbyTrends" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
       <div class="flex items-end justify-between gap-4">
         <div>
-          <h2 class="text-xl font-black">Featured Insights</h2>
-          <p class="text-sm text-slate-300">Clear recommendations customers can act on immediately.</p>
+          <h2 class="text-xl font-black">Trending Nearby</h2>
+          <p class="mt-1 text-sm text-slate-300">
+            What similar businesses are buying around you (demo).
+          </p>
         </div>
-        <div class="text-xs text-slate-400">Tip: keep this section “3 cards max.”</div>
+        <select id="radius" class="rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm">
+          <option>Similar businesses</option>
+          <option>Within 5 miles</option>
+          <option>Within 10 miles</option>
+          <option>Within 25 miles</option>
+        </select>
       </div>
 
-      <div class="mt-5 grid gap-4 md:grid-cols-3">
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4 hover:bg-white/10 transition">
-          <div class="text-xs text-slate-300">Recommendation</div>
-          <div class="mt-1 text-lg font-extrabold">Reorder cadence</div>
-          <p class="mt-2 text-sm text-slate-300">Your top items tend to run out every 10–14 days. Set a reminder and reorder early.</p>
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">Trending Categories</div>
+          <ul id="trendCats" class="mt-3 list-disc pl-5 text-slate-200"></ul>
         </div>
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4 hover:bg-white/10 transition">
-          <div class="text-xs text-slate-300">Opportunity</div>
-          <div class="mt-1 text-lg font-extrabold">Seasonal menu boost</div>
-          <p class="mt-2 text-sm text-slate-300">Add 2 seasonal cocktails and feature them for 30 days to lift add-on items.</p>
-        </div>
-        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4 hover:bg-white/10 transition">
-          <div class="text-xs text-slate-300">Value</div>
-          <div class="mt-1 text-lg font-extrabold">Bundle & save</div>
-          <p class="mt-2 text-sm text-slate-300">Pair one high-velocity item with a trade-up option to increase basket size.</p>
+
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">Recommended Items</div>
+          <div id="trendItems" class="mt-3 grid gap-2"></div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <!-- Social Buzz -->
+    <section id="socialBuzz" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
+      <h2 class="text-xl font-black">Social Buzz</h2>
+      <p class="mt-1 text-sm text-slate-300">
+        What’s trending socially + ready-to-use post ideas (demo).
+      </p>
+
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">This Week’s Hype</div>
+          <ul id="hypeList" class="mt-3 list-disc pl-5 text-slate-200"></ul>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4 md:col-span-2">
+          <div class="font-extrabold">Post Templates</div>
+          <div id="postTemplates" class="mt-3 grid gap-3"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Menu Builder -->
+    <section id="menuBuilder" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
+      <h2 class="text-xl font-black">Menu Builder</h2>
+      <p class="mt-1 text-sm text-slate-300">
+        Build a cocktail from ingredients and estimate pour cost (demo).
+      </p>
+
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">Select Ingredients</div>
+          <div id="ingredientChips" class="mt-3 flex flex-wrap gap-2"></div>
+
+          <div class="mt-4 grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs text-slate-300">Menu Price ($)</label>
+              <input id="menuPrice" type="number" value="14"
+                class="mt-1 w-full rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm" />
+            </div>
+            <div>
+              <label class="text-xs text-slate-300">Target Pour Cost %</label>
+              <input id="targetPour" type="number" value="20"
+                class="mt-1 w-full rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm" />
+            </div>
+          </div>
+
+          <button id="genCocktailBtn"
+            class="mt-4 w-full rounded-xl bg-gradient-to-r from-violet-500 to-emerald-400 px-3 py-2 text-sm font-bold text-slate-950 hover:brightness-110 transition">
+            Generate Cocktail
+          </button>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">Cocktail Output</div>
+          <div id="cocktailOut" class="mt-3 text-sm text-slate-200">
+            Select ingredients and click “Generate Cocktail”.
+          </div>
+        </div>
+      </div>
+    </section>
+``<!-- Perfect Display -->
+    <section id="perfectDisplay" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
+      <div class="flex items-end justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-black">Perfect Display</h2>
+          <p class="mt-1 text-sm text-slate-300">
+            A simple checklist to execute a great display (demo).
+          </p>
+        </div>
+        <div class="text-sm">
+          <span class="text-slate-300">Score:</span>
+          <span id="displayScore" class="font-black">0%</span>
+        </div>
+      </div>
+
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">Checklist</div>
+          <div id="displayChecks" class="mt-3 grid gap-2"></div>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">Coaching Tips</div>
+          <ul class="mt-3 list-disc pl-5 text-slate-200">
+            <li>Keep it clean: straight facings, aligned price tags.</li>
+            <li>One clear theme: no clutter, strong sign visibility.</li>
+            <li>Maintain: refill, front, and keep secondary display tidy.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Tools -->
+    <section id="tools" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
+      <div>
+        <h2 class="text-xl font-black">Tools</h2>
+        <p class="mt-1 text-sm text-slate-300">
+          Quick calculators customers can actually use (demo).
+        </p>
+      </div>
+
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">Pour Cost Calculator</div>
+
+          <div class="mt-3 grid grid-cols-2 gap-3">
+            <div>
+              <label class="text-xs text-slate-300">Bottle cost ($)</label>
+              <input id="bottleCost" type="number" value="28"
+                class="mt-1 w-full rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm" />
+            </div>
+
+            <div>
+              <label class="text-xs text-slate-300">Bottle size</label>
+              <select id="bottleSize"
+                class="mt-1 w-full rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm">
+                <option value="25.4">750ml (25.4 oz)</option>
+                <option value="33.8">1L (33.8 oz)</option>
+                <option value="59.2">1.75L (59.2 oz)</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="text-xs text-slate-300">Pour size (oz)</label>
+              <input id="pourOz" type="number" value="1.5" step="0.1"
+                class="mt-1 w-full rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm" />
+            </div>
+
+            <div>
+              <label class="text-xs text-slate-300">Target pour cost %</label>
+              <input id="targetPct" type="number" value="20"
+                class="mt-1 w-full rounded-xl border border-white/10 bg-slate-900/60 px-3 py-2 text-sm" />
+            </div>
+          </div>
+
+          <button id="calcPourBtn"
+            class="mt-4 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
+            Calculate
+          </button>
+
+          <div id="pourOut" class="mt-3 text-sm text-slate-200"></div>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">Quick Notes</div>
+          <ul class="mt-3 list-disc pl-5 text-slate-200">
+            <li>Cost per ounce = bottle cost ÷ ounces in bottle</li>
+            <li>Cost per pour = cost per ounce × pour size</li>
+            <li>Suggested menu price = cost per pour ÷ (target % / 100)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Promotions -->
+    <section id="promotions" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
+      <div>
+        <h2 class="text-xl font-black">Promotions Planner</h2>
+        <p class="mt-1 text-sm text-slate-300">
+          Simple promo ideas + a plan for the month (demo).
+        </p>
+      </div>
+
+      <div class="mt-4 grid gap-4 md:grid-cols-2">
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">Featured promos</div>
+          <div id="promoCards" class="mt-3 grid gap-3"></div>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">Plan builder</div>
+          <div class="mt-3 text-sm text-slate-300">Pick 2 promos + 1 menu highlight + 1 display goal.</div>
+          <div id="planOut" class="mt-3 grid gap-2"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Rep connection -->
+    <section id="rep" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
+      <div>
+        <h2 class="text-xl font-black">Rep Connection</h2>
+        <p class="mt-1 text-sm text-slate-300">
+          A simple way to connect with your support team (demo).
+        </p>
+      </div>
+
+      <div class="mt-4 grid gap-4 md:grid-cols-3">
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">Your Account Specialist</div>
+          <div class="mt-2 text-slate-300">Name: Taylor (Demo)</div>
+          <div class="text-slate-300">Response: Within 1 business day</div>
+          <button class="mt-3 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
+            Message
+          </button>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">Your Sales Consultant</div>
+          <div class="mt-2 text-slate-300">Name: Jordan (Demo)</div>
+          <div class="text-slate-300">Best for: Menu ideas & planning</div>
+          <button class="mt-3 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
+            Schedule a call
+          </button>
+        </div>
+
+        <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
+          <div class="font-extrabold">Service</div>
+          <div class="mt-2 text-slate-300">Track issues & history (demo)</div>
+          <button class="mt-3 w-full rounded-xl border border-white/10 bg-white/5 px-3 py-2 text-sm hover:bg-white/10 transition">
+            Open support
+          </button>
+        </div>
+      </div>
+    </section>
 
     <!-- Support -->
-    <div id="help" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
+    <section id="support" class="mt-4 rounded-3xl border border-white/10 bg-white/5 p-6 glass">
       <h2 class="text-xl font-black">Support</h2>
       <p class="mt-1 text-sm text-slate-300">Simple help entry points for customers.</p>
+
       <div class="mt-4 grid gap-4 md:grid-cols-3">
         <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
           <div class="font-extrabold">How-to Guides</div>
           <div class="mt-2 text-sm text-slate-300">Short tutorials and quick starts.</div>
         </div>
+
         <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
           <div class="font-extrabold">FAQ</div>
           <div class="mt-2 text-sm text-slate-300">Answers to common ordering questions.</div>
         </div>
+
         <div class="rounded-2xl border border-white/10 bg-slate-900/30 p-4">
           <div class="font-extrabold">Contact</div>
           <div class="mt-2 text-sm text-slate-300">Email/chat placeholder for a real support flow.</div>
         </div>
       </div>
-    </div>
+    </section>
 
     <footer class="py-8 text-center text-xs text-slate-400">
       © <span id="year"></span> Customer Insights Hub (Demo) • Dummy data only
     </footer>
-  </section>
+  </section><script>
+    // Helpers
+    const money = (n) => new Intl.NumberFormat(undefined, {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0
+    }).format(n);
 
-  <script>
-    // Dummy data generator (keeps it presentable)
-    const fmtMoney = (n) => new Intl.NumberFormat(undefined, { style:"currency", currency:"USD", maximumFractionDigits:0 }).format(n);
     const rand = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
     // KPIs
     const orders = rand(320, 980);
     const spend = rand(180000, 720000);
     const basket = Math.round(spend / Math.max(1, orders));
-    document.getElementById("kpiOrders").textContent = orders.toLocaleString();
-    document.getElementById("kpiSpend").textContent = fmtMoney(spend);
-    document.getElementById("kpiBasket").textContent = fmtMoney(basket);
 
-    const delta = () => (rand(-6, 16));
+    document.getElementById("kpiOrders").textContent = orders.toLocaleString();
+    document.getElementById("kpiSpend").textContent = money(spend);
+    document.getElementById("kpiBasket").textContent = money(basket);
+    document.getElementById("kpiTrend").textContent = ["Premium Picks ↑","RTDs ↑","Tequila ↑","Espresso Martini ↑"][rand(0,3)];
+
+    const delta = () => rand(-6, 16);
     const setDelta = (id) => {
       const v = delta();
       const el = document.getElementById(id);
@@ -252,18 +521,17 @@
     setDelta("kpiBasketDelta");
 
     // Charts (Chart.js)
-    const trendCtx = document.getElementById("trendChart");
-    const trendData = Array.from({length: 12}, () => rand(40, 140));
-    new Chart(trendCtx, {
+    const trendData = Array.from({ length: 12 }, () => rand(40, 140));
+    new Chart(document.getElementById("trendChart"), {
       type: "line",
       data: {
         labels: ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],
         datasets: [{
-          label: "Spend index (dummy)",
+          label: "Spend index (demo)",
           data: trendData,
           borderWidth: 3,
-          borderColor: "rgba(167,139,250,1)", // violet
-          backgroundColor: "rgba(52,211,153,.15)", // emerald tint
+          borderColor: "rgba(167,139,250,1)",
+          backgroundColor: "rgba(52,211,153,.15)",
           tension: .35,
           fill: true,
           pointRadius: 3,
@@ -280,13 +548,12 @@
       }
     });
 
-    const catCtx = document.getElementById("catChart");
-    new Chart(catCtx, {
+    new Chart(document.getElementById("catChart"), {
       type: "bar",
       data: {
         labels: ["Category A","Category B","Category C","Category D","Category E"],
         datasets: [{
-          label: "Share (dummy)",
+          label: "Share (demo)",
           data: [rand(10,35), rand(10,35), rand(8,28), rand(6,22), rand(6,20)],
           backgroundColor: [
             "rgba(52,211,153,.65)",
@@ -303,15 +570,252 @@
         responsive: true,
         plugins: { legend: { labels: { color: "#cbd5e1" } } },
         scales: {
-          x: { ticks: { color: "#94a3b8" }, grid: { display:false } },
+          x: { ticks: { color: "#94a3b8" }, grid: { display: false } },
           y: { ticks: { color: "#94a3b8" }, grid: { color: "rgba(255,255,255,.06)" } }
         }
       }
     });
 
-    // Buttons
-    document.getElementById("year").textContent = new Date().getFullYear();
+    // My Business: Top items (30/60/90) + YTD
+    const demoPurchases = Array.from({ length: 40 }, (_, i) => ({
+      name: `Item ${i + 1}`,
+      units30: rand(10, 99),
+      units60: rand(20, 180),
+      units90: rand(30, 260),
+      spend30: rand(800, 9800),
+      spend60: rand(1200, 16800),
+      spend90: rand(1600, 22800)
+    }));
 
+    const ytdSpendVal = demoPurchases.reduce((s, x) => s + x.spend90, 0);
+    document.getElementById("ytdSpend").textContent = money(ytdSpendVal);
+
+    function renderTopItems(days) {
+      document.getElementById("rangeLabel").textContent = `Last ${days} days`;
+      const keyU = `units${days}`;
+      const keyS = `spend${days}`;
+      const top = [...demoPurchases].sort((a, b) => b[keyS] - a[keyS]).slice(0, 10);
+
+      document.getElementById("topItemsTbody").innerHTML = top.map(x => `
+        <tr class="border-b border-white/5">
+          <td class="py-2">${x.name}</td>
+          <td class="py-2 text-right">${x[keyU].toLocaleString()}</td>
+          <td class="py-2 text-right">${money(x[keyS])}</td>
+        </tr>
+      `).join("");
+    }
+
+    document.querySelectorAll(".rangeBtn").forEach(btn => {
+      btn.addEventListener("click", () => renderTopItems(btn.dataset.days));
+    });
+    renderTopItems(30);
+
+    // Trending Nearby
+    const cats = ["Tequila","Vodka","Whiskey","RTD","Sparkling","Liqueurs","Mixers","NA options"];
+    document.getElementById("trendCats").innerHTML =
+      [...cats].sort(() => Math.random() - 0.5).slice(0, 5)
+        .map(c => `<li>${c} trending ↑</li>`).join("");
+
+    document.getElementById("trendItems").innerHTML = Array.from({ length: 5 }, (_, i) => {
+      const c = cats[rand(0, cats.length - 1)];
+      return `
+        <div class="rounded-xl border border-white/10 bg-white/5 p-3 text-sm">
+          <div class="font-extrabold">${c} Pick ${i + 1}</div>
+          <div class="text-slate-300">Popular with similar businesses.</div>
+        </div>
+      `;
+    }).join("");
+
+    // Social Buzz
+    const hype = [
+      "Espresso martini flights",
+      "Spicy margarita riffs",
+      "Low-ABV spritz",
+      "Mini cocktail cans",
+      "Charcuterie pairings",
+      "Mocktail menus",
+      "Late-night bundles"
+    ];
+    document.getElementById("hypeList").innerHTML = hype.slice(0, 5).map(x => `<li>${x}</li>`).join("");
+
+    const templates = [
+      { t: "New This Week", b: "Try our new feature cocktail — limited time only." },
+      { t: "Staff Pick", b: "Ask your bartender what they’re pouring this weekend." },
+      { t: "Happy Hour", b: "Two hours. Two cocktails. One great night." }
+    ];
+    document.getElementById("postTemplates").innerHTML = templates.map(x => `
+      <div class="rounded-xl border border-white/10 bg-white/5 p-3">
+        <div class="font-extrabold">${x.t}</div>
+        <div class="mt-1 text-slate-300">${x.b}</div>
+        <div class="mt-2 text-xs text-slate-400">Copy/paste caption</div>
+      </div>
+    `).join("");
+
+    // Menu Builder: ingredient chips + recipe + pour cost
+    const ingredients = [
+      { key: "Vodka", costPerOz: 0.80 },
+      { key: "Tequila", costPerOz: 0.95 },
+      { key: "Whiskey", costPerOz: 1.05 },
+      { key: "Lime", costPerOz: 0.20 },
+      { key: "Lemon", costPerOz: 0.20 },
+      { key: "Simple Syrup", costPerOz: 0.15 },
+      { key: "Honey Syrup", costPerOz: 0.22 },
+      { key: "Ginger Beer", costPerOz: 0.18 },
+      { key: "Espresso", costPerOz: 0.35 },
+      { key: "Bitters", costPerOz: 0.10 }
+    ];
+
+    const chosen = new Set();
+    document.getElementById("ingredientChips").innerHTML = ingredients.map(i =>
+      `<button class="chipBtn rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs text-slate-200 hover:bg-white/10 transition" data-key="${i.key}">${i.key}</button>`
+    ).join("");
+
+    document.querySelectorAll(".chipBtn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const k = btn.dataset.key;
+        if (chosen.has(k)) {
+          chosen.delete(k);
+          btn.classList.remove("ring-2","ring-emerald-400");
+        } else {
+          chosen.add(k);
+          btn.classList.add("ring-2","ring-emerald-400");
+        }
+      });
+    });
+
+    const getCost = (key) => (ingredients.find(x => x.key === key)?.costPerOz ?? 0.2);
+    const pourCostPct = (drinkCost, salePrice) => (drinkCost / Math.max(0.01, salePrice)) * 100;
+
+    document.getElementById("genCocktailBtn").addEventListener("click", () => {
+      const picks = [...chosen];
+      const salePrice = Number(document.getElementById("menuPrice").value || 14);
+
+      const spirit = picks.find(p => ["Vodka","Tequila","Whiskey"].includes(p)) || "Tequila";
+      const citrus = picks.find(p => ["Lime","Lemon"].includes(p)) || "Lime";
+      const sweet  = picks.find(p => ["Simple Syrup","Honey Syrup"].includes(p)) || "Simple Syrup";
+      const mixer  = picks.find(p => ["Ginger Beer","Espresso"].includes(p)) || null;
+
+      const recipe = [
+        { name: spirit, oz: 1.5 },
+        { name: citrus, oz: 0.75 },
+        { name: sweet,  oz: 0.5 }
+      ];
+      if (mixer) recipe.push({ name: mixer, oz: 2.0 });
+
+      const drinkCost = recipe.reduce((sum, r) => sum + r.oz * getCost(r.name), 0);
+      const pc = pourCostPct(drinkCost, salePrice);
+
+      const steps =
+        mixer === "Ginger Beer" ? "Build over ice, top with ginger beer, garnish with lime wheel." :
+        mixer === "Espresso" ? "Shake hard with ice, strain into coupe, garnish with 3 coffee beans." :
+        "Shake with ice, strain into rocks over fresh ice, garnish.";
+
+      document.getElementById("cocktailOut").innerHTML = `
+        <div class="text-lg font-extrabold">${spirit} Signature</div>
+        <div class="mt-2 text-slate-300">${steps}</div>
+        <div class="mt-3 rounded-xl border border-white/10 bg-white/5 p-3">
+          <div class="text-xs text-slate-300">Recipe</div>
+          <ul class="mt-2 list-disc pl-5">
+            ${recipe.map(r => `<li>${r.oz} oz ${r.name}</li>`).join("")}
+          </ul>
+          <div class="mt-3 grid grid-cols-2 gap-3 text-sm">
+            <div><span class="text-slate-300">Est. drink cost:</span> <b>${money(drinkCost)}</b></div>
+            <div><span class="text-slate-300">Pour cost:</span> <b>${pc.toFixed(1)}%</b></div>
+          </div>
+        </div>
+      `;
+    });
+
+    // Perfect Display checklist + score
+    const checks = [
+      "Price tags visible and aligned",
+      "Facing straight + product pulled forward",
+      "Display has a clear theme/message",
+      "Signage is clean and readable",
+      "Secondary display maintained",
+      "Out-of-stocks addressed",
+      "No clutter / no damaged materials"
+    ];
+
+    const checkWrap = document.getElementById("displayChecks");
+    checkWrap.innerHTML = checks.map((c, i) => `
+      <label class="flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-3">
+        <input type="checkbox" class="dispCheck h-4 w-4" data-i="${i}" />
+        <span class="text-sm">${c}</span>
+      </label>
+    `).join("");
+
+    function updateDisplayScore() {
+      const total = document.querySelectorAll(".dispCheck").length;
+      const on = [...document.querySelectorAll(".dispCheck")].filter(x => x.checked).length;
+      const pct = Math.round((on / Math.max(1, total)) * 100);
+      document.getElementById("displayScore").textContent = `${pct}%`;
+    }
+    document.querySelectorAll(".dispCheck").forEach(cb => cb.addEventListener("change", updateDisplayScore));
+
+    // Tools: Pour Cost Calculator
+    function calcPour() {
+      const bottleCost = Number(document.getElementById("bottleCost").value || 0);
+      const bottleOz = Number(document.getElementById("bottleSize").value || 25.4);
+      const pourOz = Number(document.getElementById("pourOz").value || 1.5);
+      const targetPct = Number(document.getElementById("targetPct").value || 20);
+
+      const costPerOz = bottleCost / Math.max(0.01, bottleOz);
+      const costPerPour = costPerOz * pourOz;
+      const suggestedPrice = costPerPour / Math.max(0.01, (targetPct / 100));
+
+      document.getElementById("pourOut").innerHTML = `
+        <div class="mt-2 rounded-xl border border-white/10 bg-white/5 p-3">
+          <div><span class="text-slate-300">Cost per oz:</span> <b>${money(costPerOz)}</b></div>
+          <div><span class="text-slate-300">Cost per pour:</span> <b>${money(costPerPour)}</b></div>
+          <div><span class="text-slate-300">Suggested menu price:</span> <b>${money(suggestedPrice)}</b></div>
+        </div>
+      `;
+    }
+    document.getElementById("calcPourBtn").addEventListener("click", calcPour);
+    calcPour();
+
+    // Promotions Planner
+    const promos = [
+      { title: "Seasonal Feature", desc: "Run one featured cocktail for 30 days with a simple menu callout." },
+      { title: "Bundle", desc: "Pair a top seller with a trade-up option to lift basket size." },
+      { title: "Happy Hour Push", desc: "Pick 2 items to spotlight during peak traffic windows." }
+    ];
+
+    const plan = [];
+    const promoWrap = document.getElementById("promoCards");
+    const planOut = document.getElementById("planOut");
+
+    function renderPlan() {
+      planOut.innerHTML = plan.length
+        ? plan.map(p => `<div class="rounded-xl border border-white/10 bg-white/5 p-3 text-sm"><b>${p}</b></div>`).join("")
+        : `<div class="text-sm text-slate-400">Select promos to build a plan.</div>`;
+    }
+
+    promoWrap.innerHTML = promos.map((p, idx) => `
+      <button class="promoBtn rounded-xl border border-white/10 bg-white/5 p-3 text-left hover:bg-white/10 transition" data-idx="${idx}">
+        <div class="font-extrabold">${p.title}</div>
+        <div class="mt-1 text-sm text-slate-300">${p.desc}</div>
+      </button>
+    `).join("");
+
+    document.querySelectorAll(".promoBtn").forEach(btn => btn.addEventListener("click", () => {
+      const p = promos[Number(btn.dataset.idx)];
+      if (!plan.includes(p.title)) plan.push(p.title);
+      renderPlan();
+    }));
+    renderPlan();
+
+    // Theme toggle
+    let light = false;
+    document.getElementById("themeBtn").addEventListener("click", () => {
+      light = !light;
+      document.body.className = light
+        ? "min-h-screen bg-slate-50 text-slate-900"
+        : "min-h-screen bg-slate-950 text-slate-100";
+    });
+
+    // Export
     document.getElementById("exportBtn").addEventListener("click", () => {
       const payload = {
         filters: {
@@ -320,8 +824,22 @@
           timeframe: document.getElementById("time").value
         },
         kpis: { orders, spend, basket },
+        plan,
         generatedAt: new Date().toISOString(),
-        note: "Dummy data export"
+        note: "Demo export"
       };
+
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: "application/json" });
       const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "customer-insights-export.json";
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // Footer year
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
