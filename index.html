@@ -1,73 +1,73 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Customer Insights Hub (Demo)</title>
-  <meta name="description" content="Customer-facing insights hub demo. Dummy data only." />
+  <meta name="description" content="Customer-facing insights hub demo. Dummy data only."/>
 
-  <!-- Tailwind (light usage only) -->
+  <!-- Tailwind (utilities only) -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- SGWS / Proof Theme -->
   <style>
     :root{
-      --bg:#0b0b0b;
-      --panel:#151515;
-      --border:#2a2a2a;
-      --text:#ffffff;
-      --muted:#c7c7c7;
+      --bg:#f5f6f8;
+      --panel:#ffffff;
+      --border:#e5e7eb;
+      --text:#111827;
+      --muted:#6b7280;
 
       --accent:#c8102e;
       --accent2:#9e0b23;
 
       --good:#2fbf71;
       --bad:#c8102e;
-      --warn:#f5a623;
     }
 
     *{box-sizing:border-box}
     body{
       margin:0;
       font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial;
-      background:linear-gradient(180deg,#070707,#0b0b0b);
-      color:var(--text)
+      background:
+        radial-gradient(1000px 300px at -10% -10%, rgba(200,16,46,.08), transparent),
+        linear-gradient(180deg,#f7f7f8,#f1f2f4);
+      color:var(--text);
     }
 
     header{
-      display:flex;
-      gap:20px;
-      align-items:center;
-      padding:14px 24px;
+      position:sticky;top:0;z-index:10;
+      display:flex;align-items:center;gap:24px;
+      padding:16px 28px;
       border-bottom:1px solid var(--border);
-      background:rgba(11,11,11,.95)
+      background:rgba(255,255,255,.9);
+      backdrop-filter:blur(8px);
     }
 
     .brand{font-weight:900;font-size:18px}
-
-    nav a{
-      margin-right:14px;
-      color:var(--muted);
-      text-decoration:none;
-      font-weight:600
-    }
+    nav a{margin-right:16px;color:var(--muted);text-decoration:none;font-weight:600}
     nav a:hover{color:var(--accent)}
 
-    .container{max-width:1200px;margin:0 auto;padding:28px}
+    .container{max-width:1200px;margin:0 auto;padding:36px}
 
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px;margin-top:18px}
     .card{
       grid-column:span 12;
       background:var(--panel);
       border:1px solid var(--border);
-      border-radius:14px;
-      padding:16px
+      border-radius:16px;
+      padding:22px;
+      position:relative;
+      transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .card:hover{
+      transform:translateY(-2px);
+      box-shadow:0 16px 36px rgba(0,0,0,.08);
     }
 
     @media(min-width:900px){
+      .span4{grid-column:span 4}
       .span6{grid-column:span 6}
       .span8{grid-column:span 8}
-      .span4{grid-column:span 4}
     }
 
     .title{font-size:22px;font-weight:900}
@@ -75,30 +75,55 @@
 
     .kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
     .kpi{
-      background:rgba(255,255,255,.03);
+      background:linear-gradient(180deg,#ffffff,#f9fafb);
       border:1px solid var(--border);
       border-radius:12px;
-      padding:12px
+      padding:14px;
     }
     .kpi .label{color:var(--muted);font-size:12px}
-    .kpi .value{font-size:24px;font-weight:900;margin-top:6px}
+    .kpi .value{font-size:26px;font-weight:900;margin-top:6px}
 
     .delta.good{color:var(--good)}
     .delta.bad{color:var(--bad)}
 
-    table{width:100%;border-collapse:collapse;font-size:13px}
-    th,td{padding:8px;border-bottom:1px solid var(--border)}
-    th{color:var(--muted);text-align:left}
+    table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+    th,td{border-bottom:1px solid var(--border);padding:10px;text-align:left}
+    th{color:var(--muted)}
 
     .pill{
       display:inline-block;
-      padding:4px 10px;
+      padding:6px 12px;
       border-radius:999px;
       border:1px solid var(--border);
       font-size:12px;
-      margin:4px 6px 0 0;
-      color:var(--muted)
+      color:var(--muted);
+      margin:6px 6px 0 0;
+      cursor:pointer;
+      background:#fff;
     }
+    .pill.active{border-color:var(--accent);color:var(--accent)}
+
+    .btn{
+      padding:6px 12px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      font-size:12px;
+      background:#fff;
+      cursor:pointer;
+    }
+    .btn.primary{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+    .toast{
+      position:fixed;bottom:24px;right:24px;
+      background:#111827;color:#fff;
+      padding:12px 16px;border-radius:12px;
+      box-shadow:0 10px 30px rgba(0,0,0,.25);
+      opacity:0;transform:translateY(10px);
+      transition:.25s;
+    }
+    .toast.show{opacity:1;transform:none}
+
+    .footer{text-align:center;color:var(--muted);font-size:12px;margin:48px 0}
   </style>
 </head>
 
@@ -109,32 +134,34 @@
   <nav>
     <a href="#overview">Overview</a>
     <a href="#myBusiness">My Business</a>
-    <a href="#nearbyTrends">Trending Nearby</a>
+    <a href="#trendingNearby">Trending Nearby</a>
     <a href="#socialBuzz">Social Buzz</a>
+    <a href="#support">Support</a>
   </nav>
 </header>
 
 <main class="container">
 
-  <!-- OVERVIEW -->
+  <!-- HERO -->
   <section id="overview" class="grid">
     <div class="card span8">
-      <div class="title">
-        Grow smarter with <span style="color:var(--accent)">actionable insights</span>
+      <div class="title" style="font-size:32px;line-height:1.15">
+        Grow smarter with<br/>
+        <span style="color:var(--accent)">actionable insights</span>
       </div>
       <p class="sub">
-        A Proof-style customer experience highlighting trends, momentum, and opportunities.
+        Understand what’s changing, why it matters, and what to do next.
       </p>
     </div>
 
     <div class="card span4">
       <div class="sub">Filters (demo)</div>
-      <select class="w-full mt-2 bg-black border border-[var(--border)] p-2 rounded">
+      <select class="w-full mt-2 border border-[var(--border)] p-2 rounded">
         <option>All Regions</option>
         <option>North Bay</option>
         <option>East Bay</option>
       </select>
-      <select class="w-full mt-2 bg-black border border-[var(--border)] p-2 rounded">
+      <select class="w-full mt-2 border border-[var(--border)] p-2 rounded">
         <option>On‑Premise</option>
         <option>Off‑Premise</option>
       </select>
@@ -146,22 +173,22 @@
     <div class="kpis">
       <div class="kpi">
         <div class="label">Estimated Orders</div>
-        <div id="kpiOrders" class="value">—</div>
-        <div id="kpiOrdersDelta" class="delta good">—</div>
+        <div id="kpiOrders" class="value"></div>
+        <div class="delta good">▲ 6%</div>
       </div>
       <div class="kpi">
         <div class="label">Estimated Spend</div>
-        <div id="kpiSpend" class="value">—</div>
-        <div id="kpiSpendDelta" class="delta good">—</div>
+        <div id="kpiSpend" class="value"></div>
+        <div class="delta good">▲ 4%</div>
       </div>
       <div class="kpi">
         <div class="label">Avg Basket</div>
-        <div id="kpiBasket" class="value">—</div>
-        <div id="kpiBasketDelta" class="delta bad">—</div>
+        <div id="kpiBasket" class="value"></div>
+        <div class="delta bad">▼ 2%</div>
       </div>
       <div class="kpi">
-        <div class="label">Trending Right Now</div>
-        <div id="kpiTrend" class="value" style="font-size:18px">—</div>
+        <div class="label">Trending</div>
+        <div id="kpiTrend" class="value" style="font-size:18px"></div>
       </div>
     </div>
   </section>
@@ -169,344 +196,119 @@
   <!-- MY BUSINESS -->
   <section id="myBusiness" class="card mt-6">
     <div class="title">My Business</div>
-    <p class="sub">What’s working — and what needs attention.</p>
+    <p class="sub">Your brands and products — not just categories.</p>
 
-    <div class="grid mt-4">
-      <div class="card span6">
-        <div class="sub" style="color:var(--good);font-weight:700">Trending Up ↑</div>
-        <table>
-          <tbody id="trendUp"></tbody>
-        </table>
-      </div>
-
-      <div class="card span6">
-        <div class="sub" style="color:var(--bad);font-weight:700">Trending Down ↓</div>
-        <table>
-          <tbody id="trendDown"></tbody>
-        </table>
-      </div>
-    </div>
+    <table>
+      <tbody>
+        <tr><td>Brand A Tequila Blanco</td><td class="delta good">↑ Faster reorders</td></tr>
+        <tr><td>Brand B RTD 4‑Pack</td><td class="delta good">↑ New placements</td></tr>
+        <tr><td>Brand C Vodka 750ml</td><td class="delta bad">↓ Slowing velocity</td></tr>
+      </tbody>
+    </table>
   </section>
 
   <!-- TRENDING NEARBY -->
-  <section id="nearbyTrends" class="card mt-6">
+  <section id="trendingNearby" class="card mt-6">
     <div class="title">Trending Nearby</div>
-    <p class="sub">What similar businesses are leaning into.</p>
+    <p class="sub">Tap a category to see what’s trending in your area.</p>
 
-    <div id="nearbyCats"></div>
-    <div id="nearbyItems" class="mt-2"></div>
+    <div id="categories"></div>
+    <div id="trendDrill" class="mt-4"></div>
   </section>
 
   <!-- SOCIAL BUZZ -->
   <section id="socialBuzz" class="card mt-6">
     <div class="title">Social Buzz</div>
-    <p class="sub">What’s resonating with guests right now.</p>
+    <p class="sub">What guests are responding to right now.</p>
 
-    <ul id="socialTrends"></ul>
-    <ul id="socialIdeas" class="mt-2"></ul>
+    <div>
+      <div class="card mt-3">
+        <b>Spicy Margarita Riffs</b>
+        <p class="sub">Featuring Brand A Tequila</p>
+        <button class="btn primary" onclick="addToCart('Brand A Tequila')">Add to Cart</button>
+      </div>
+
+      <div class="card mt-3">
+        <b>Espresso Martini Variations</b>
+        <p class="sub">Featuring Brand B Vodka</p>
+        <button class="btn primary" onclick="addToCart('Brand B Vodka')">Add to Cart</button>
+      </div>
+    </div>
   </section>
-<!-- MENU COSTING -->
-<section id="menuCosting" class="card mt-6">
-  <div class="title">Menu Costing & Profit Builder</div>
-  <p class="sub">
-    Build a cocktail, understand pour cost, and compare premium vs value bottles (demo).
-  </p>
 
-  <div class="grid mt-4">
-    <!-- INGREDIENT INPUT -->
-    <div class="card span6">
-      <div class="sub">Cocktail Ingredients</div>
+  <!-- SUPPORT -->
+  <section id="support" class="card mt-6">
+    <div class="title">Your Support Team</div>
 
-      <table class="table mt-2">
-        <thead>
-          <tr>
-            <th>Ingredient</th>
-            <th>Bottle $</th>
-            <th>Bottle oz</th>
-            <th>Recipe oz</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody id="cocktailRows"></tbody>
-      </table>
-
-      <button id="addIngredientBtn"
-        class="mt-3 rounded border border-[var(--border)] px-3 py-2 text-sm">
-        + Add ingredient
-      </button>
-    </div>
-
-    <!-- RESULTS -->
-    <div class="card span6">
-      <div class="sub">Pricing Results</div>
-
-      <div class="mt-2">
-        <label class="sub">Menu Price ($)</label>
-        <input id="menuPriceInput" type="number" value="14"
-          class="w-full mt-1 bg-black border border-[var(--border)] p-2 rounded" />
+    <div class="grid mt-4">
+      <div class="card span4">
+        <b>Your Sales Consultant</b>
+        <p class="sub">Alex Morgan</p>
+        <button class="btn primary mt-2">Message Rep</button>
       </div>
 
-      <div class="mt-4" id="menuResults"></div>
+      <div class="card span4">
+        <b>Account Specialist</b>
+        <p class="sub">Jamie Lee</p>
+        <button class="btn mt-2">Schedule Call</button>
+      </div>
 
-      <div class="mt-4">
-        <div class="sub">Swap Scenario (Spirit Only)</div>
-        <div id="swapResults" class="mt-2"></div>
+      <div class="card span4">
+        <b>Customer Support</b>
+        <p class="sub">Email or chat support</p>
+        <button class="btn mt-2">Contact Support</button>
       </div>
     </div>
+  </section>
+
+  <div class="footer">
+    © <span id="year"></span> Customer Insights Hub • Demo only
   </div>
-</section>
-  <!-- PROMOTIONS -->
-<section id="promotions" class="card mt-6">
-  <div class="title">Promotions Planner</div>
-  <p class="sub">
-    Simple promotion ideas designed to drive traffic, trial, and margin (demo).
-  </p>
 
-  <div class="grid mt-4">
-    <div class="card span6">
-      <div class="sub">Available Promotions</div>
-      <ul id="promoList" class="mt-2"></ul>
-    </div>
-
-    <div class="card span6">
-      <div class="sub">Your Promotion Plan</div>
-      <ul id="promoPlan" class="mt-2"></ul>
-    </div>
-  </div>
-</section>
-
-<!-- SUPPORT -->
-<section id="support" class="card mt-6">
-  <div class="title">Support</div>
-  <p class="sub">
-    Get help, resources, or connect with your support team (demo).
-  </p>
-
-  <div class="grid mt-4">
-    <div class="card span4">
-      <div class="sub">Guides & Tutorials</div>
-      <p class="sub">Quick how‑tos and best practices.</p>
-    </div>
-
-    <div class="card span4">
-      <div class="sub">FAQ</div>
-      <p class="sub">Answers to common ordering and menu questions.</p>
-    </div>
-
-    <div class="card span4">
-      <div class="sub">Contact Support</div>
-      <p class="sub">Chat or email with a support specialist.</p>
-    </div>
-  </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="mt-10 text-center sub">
-  © <span id="year"></span> Customer Insights Hub • Demo experience only
-</footer>
 </main>
 
-<!-- ✅ ONE SCRIPT — EVERYTHING LIVES HERE -->
+<div id="toast" class="toast">Added to cart</div>
+
 <script>
-  const money = n =>
-    new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n);
+  const money=n=>new Intl.NumberFormat(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0}).format(n);
+  const rand=(a,b)=>Math.floor(Math.random()*(b-a+1))+a;
 
-  const rand = (min,max)=>Math.floor(Math.random()*(max-min+1))+min;
+  kpiOrders.textContent=rand(320,980).toLocaleString();
+  kpiSpend.textContent=money(rand(180000,720000));
+  kpiBasket.textContent=money(rand(400,900));
+  kpiTrend.textContent=["Tequila ↑","RTDs ↑","Vodka ↓","Espresso Martini ↑"][rand(0,3)];
 
-  // KPIs
-  const orders = rand(320,980);
-  const spend = rand(180000,720000);
-  const basket = Math.round(spend / orders);
+  const categoryData={
+    Tequila:["Brand A Blanco","Brand C Reposado","Brand D RTD Tequila"],
+    RTDs:["Brand B 4‑Pack","Brand E Vodka Soda","Brand F Margarita Can"],
+    Vodka:["Brand B Vodka","Brand G Premium Vodka"]
+  };
 
-  document.getElementById("kpiOrders").textContent = orders.toLocaleString();
-  document.getElementById("kpiSpend").textContent = money(spend);
-  document.getElementById("kpiBasket").textContent = money(basket);
+  categories.innerHTML=Object.keys(categoryData)
+    .map(c=>`<span class="pill" onclick="showTrend('${c}')">${c}</span>`).join("");
 
-  document.getElementById("kpiOrdersDelta").textContent = "▲ 6%";
-  document.getElementById("kpiSpendDelta").textContent = "▲ 4%";
-  document.getElementById("kpiBasketDelta").textContent = "▼ 2%";
-
-  document.getElementById("kpiTrend").textContent =
-    ["Tequila ↑","RTDs ↑","Premium Vodka ↓","Espresso Martini ↑"][rand(0,3)];
-
-  // My Business
-  const movers = [
-    { name: "Premium Tequila", delta: 4200 },
-    { name: "RTD Cocktails", delta: 3100 },
-    { name: "Craft Vodka", delta: 1800 },
-    { name: "Imported Whiskey", delta: -900 },
-    { name: "Flavored Rum", delta: -1400 },
-    { name: "Value Gin", delta: -2200 }
-  ];
-
-  document.getElementById("trendUp").innerHTML =
-    movers.filter(x=>x.delta>0).map(x=>`
-      <tr><td>${x.name}</td><td class="delta good">▲ ${money(x.delta)}</td></tr>
-    `).join("");
-
-  document.getElementById("trendDown").innerHTML =
-    movers.filter(x=>x.delta<0).map(x=>`
-      <tr><td>${x.name}</td><td class="delta bad">▼ ${money(Math.abs(x.delta))}</td></tr>
-    `).join("");
-
-  // Trending Nearby
-  document.getElementById("nearbyCats").innerHTML =
-    ["Tequila","RTDs","Premium Vodka","Low‑ABV"].map(x=>`<span class="pill">${x}</span>`).join("");
-
-  document.getElementById("nearbyItems").innerHTML =
-    ["Spicy Margaritas","Espresso Martinis","Canned Cocktails"].map(x=>`<span class="pill">${x}</span>`).join("");
-
-  // Social Buzz
-  document.getElementById("socialTrends").innerHTML =
-    ["Espresso martini twists","Spicy cocktails","Mini flights"].map(x=>`<li>${x}</li>`).join("");
-
-  document.getElementById("socialIdeas").innerHTML =
-    ["Feature a premium cocktail","Highlight staff picks","Limited‑time menu item"].map(x=>`<li>${x}</li>`).join("");
-  // ================================
-// MENU COSTING & COCKTAIL BUILDER
-// ================================
-const cocktail = {
-  ingredients: []
-};
-
-function addIngredientRow(data = {}) {
-  cocktail.ingredients.push({
-    name: data.name || "Tequila",
-    bottleCost: data.bottleCost ?? 60,
-    bottleOz: data.bottleOz ?? 25.4,
-    recipeOz: data.recipeOz ?? 1.5
-  });
-  renderCocktail();
-}
-
-function removeIngredient(idx) {
-  cocktail.ingredients.splice(idx, 1);
-  renderCocktail();
-}
-
-function renderCocktail() {
-  const tbody = document.getElementById("cocktailRows");
-  tbody.innerHTML = cocktail.ingredients.map((i, idx) => `
-    <tr>
-      <td><input value="${i.name}" data-k="name" data-i="${idx}" /></td>
-      <td><input type="number" value="${i.bottleCost}" data-k="bottleCost" data-i="${idx}" /></td>
-      <td><input type="number" value="${i.bottleOz}" data-k="bottleOz" data-i="${idx}" /></td>
-      <td><input type="number" value="${i.recipeOz}" data-k="recipeOz" data-i="${idx}" /></td>
-      <td><button onclick="removeIngredient(${idx})">✕</button></td>
-    </tr>
-  `).join("");
-
-  tbody.querySelectorAll("input").forEach(inp => {
-    inp.addEventListener("input", () => {
-      const i = inp.dataset.i;
-      const k = inp.dataset.k;
-      cocktail.ingredients[i][k] = inp.type === "number"
-        ? Number(inp.value)
-        : inp.value;
-      calculateMenu();
-    });
-  });
-
-  calculateMenu();
-}
-
-function calculateMenu() {
-  const menuPrice = Number(document.getElementById("menuPriceInput").value || 0);
-
-  let totalCost = 0;
-  cocktail.ingredients.forEach(i => {
-    const costPerOz = i.bottleCost / i.bottleOz;
-    totalCost += costPerOz * i.recipeOz;
-  });
-
-  const pourCostPct = menuPrice ? (totalCost / menuPrice) * 100 : 0;
-  const gross = menuPrice - totalCost;
-
-  document.getElementById("menuResults").innerHTML = `
-    <div class="pill">Drink Cost: <b>${money(totalCost)}</b></div>
-    <div class="pill">Pour Cost: <b>${pourCostPct.toFixed(1)}%</b></div>
-    <div class="pill">Gross / Drink: <b>${money(gross)}</b></div>
-  `;
-
-  renderSwap(totalCost, menuPrice);
-}
-
-function renderSwap(currentCost, menuPrice) {
-  if (!cocktail.ingredients.length) return;
-
-  const base = cocktail.ingredients[0]; // assume first is spirit
-  const premium = { ...base, bottleCost: 60 };
-  const value = { ...base, bottleCost: 20 };
-
-  function calcVariant(v) {
-    const costPerOz = v.bottleCost / v.bottleOz;
-    const newCost =
-      currentCost -
-      (base.bottleCost / base.bottleOz) * base.recipeOz +
-      costPerOz * base.recipeOz;
-
-    return {
-      cost: newCost,
-      pour: menuPrice ? (newCost / menuPrice) * 100 : 0,
-      gross: menuPrice - newCost
-    };
+  function showTrend(cat){
+    document.querySelectorAll('.pill').forEach(p=>p.classList.remove('active'));
+    event.target.classList.add('active');
+    trendDrill.innerHTML=`
+      <b>${cat} – Trending in Your Area</b>
+      ${categoryData[cat].map(p=>`
+        <div class="card mt-2">
+          ${p}
+          <button class="btn primary mt-2" onclick="addToCart('${p}')">Add to Cart</button>
+        </div>
+      `).join("")}
+    `;
   }
 
-  const A = calcVariant(premium);
-  const B = calcVariant(value);
+  function addToCart(item){
+    const t=document.getElementById("toast");
+    t.textContent=`${item} added to cart`;
+    t.classList.add("show");
+    setTimeout(()=>t.classList.remove("show"),2000);
+  }
 
-  document.getElementById("swapResults").innerHTML = `
-    <div class="pill">Premium ($60): ${A.pour.toFixed(1)}% • ${money(A.gross)}</div>
-    <div class="pill">Value ($20): ${B.pour.toFixed(1)}% • ${money(B.gross)}</div>
-  `;
-}
-
-// Seed example cocktail
-addIngredientRow({ name:"Tequila", bottleCost:60, bottleOz:25.4, recipeOz:1.5 });
-addIngredientRow({ name:"Lime Juice", bottleCost:5, bottleOz:16, recipeOz:0.75 });
-addIngredientRow({ name:"Simple Syrup", bottleCost:4, bottleOz:16, recipeOz:0.5 });
-
-document.getElementById("addIngredientBtn").addEventListener("click", () => addIngredientRow());
-  // ================================
-// PROMOTIONS PLANNER
-// ================================
-const promotions = [
-  "Happy Hour Feature (2–4pm)",
-  "Premium Cocktail Spotlight",
-  "Bundle: Cocktail + Appetizer",
-  "Seasonal Limited‑Time Cocktail",
-  "Staff Pick of the Week"
-];
-
-const promoPlan = [];
-
-function renderPromos() {
-  document.getElementById("promoList").innerHTML = promotions.map((p, i) => `
-    <li>
-      <button onclick="addPromo(${i})"
-        class="pill">
-        + ${p}
-      </button>
-    </li>
-  `).join("");
-
-  document.getElementById("promoPlan").innerHTML = promoPlan.length
-    ? promoPlan.map(p => `<li class="pill">${p}</li>`).join("")
-    : `<li class="sub">No promotions selected yet.</li>`;
-}
-
-function addPromo(idx) {
-  const p = promotions[idx];
-  if (!promoPlan.includes(p)) promoPlan.push(p);
-  renderPromos();
-}
-
-renderPromos();
-
-// ================================
-// FOOTER YEAR
-// ================================
-document.getElementById("year").textContent = new Date().getFullYear();
+  year.textContent=new Date().getFullYear();
 </script>
 
 </body>
